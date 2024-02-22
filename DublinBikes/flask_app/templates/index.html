@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <link href="../static/index.css" rel="stylesheet">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <title>dublin bikes map</title>
+
+    <style>
+        /* Specify the size of the div element that contains the map */
+        #map {
+            height: 400px;  /* This is the height of the map */
+            width: 100%;    /* This is the width of the map */
+        }
+    </style>
+</head>
+<body>
+<div class="page-header">
+    <img src="../static/DB_LOGO.png" alt="logo">
+    <h1 class="text-center">Dublin Bikes</h1>
+  </div>
+<div class="container">
+    <div class="row justify-content-end">
+        <div class="dropdown" id="dropdown-menu">
+
+        </div>
+      <div class="col-4">
+          <div class="btn-group">
+              <button  type="button" id="abikes" class="btn btn-primary" onclick="displayMarker(0)">AVAILABLE BIKES</button>
+              <button  type="button" id="aspaces" class="btn btn-primary" onclick="displayMarker(1)">AVAILABLE SPACES</button>
+          </div>
+      </div>
+    </div>
+    <div class="row shadow" id="map-row">
+        <!--The div element for the map -->
+        <div id="map"></div>
+    </div>
+
+    <div class="chart_div" align='center'>
+    <div class="row" id="hourly">
+        <h4>Hourly Chart</h4>
+        <div id="hourly-chart"></div>
+    </div>
+    <div class="row" id="daily">
+        <h4>Daily Chart</h4>
+        <div id="daily-chart"></div>
+    </div>
+    <div class="row" id="prediction">
+        <div class="col-1" id="preButton"></div>
+            <div class="col-10">
+                <h4>Prediction Chart</h4>
+                <h5 id="prediction-title"></h5>
+                <div id="prediction-chart"></div>
+            </div>
+        <div class="col-1" id="nextButton"></div>
+    </div>
+        </div>
+    <div class="row" id="content-row2">
+        <h4>Weather Forecast</h4>
+        <div class="row" id="weather"></div>
+    </div>
+</div>
+
+<div class="footer">
+    &copy; COMP30830 Software Engineering Assignment | Designed by AnYi Huang, Rachel Courtney, Xiaoyan Cao
+    </div>
+
+<script>
+    // Function to initialize the map
+    function initMap() {
+        // The location of Dublin
+        var dublin = {lat: 53.349805, lng: -6.260310};
+        // The map, centered at Dublin
+        var map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 14, center: dublin});
+        // The marker, positioned at Dublin
+        var marker = new google.maps.Marker({position: dublin, map: map});
+    }
+</script>
+
+<!-- Load the Google Maps API -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&callback=initMap">
+</script>
+</body>
+</html>

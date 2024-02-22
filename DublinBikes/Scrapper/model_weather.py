@@ -8,7 +8,7 @@ metadata = Base.metadata
 
 
 class WeatherData(Base):
-    __tablename__ = 'weather_data'
+    __tablename__ = 'WeatherData'
 
     id = Column(BIGINT(20), primary_key=True)
     date = Column(DateTime)

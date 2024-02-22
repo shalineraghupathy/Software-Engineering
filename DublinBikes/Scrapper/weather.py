@@ -48,6 +48,8 @@ def job():
     fetch_and_store_weather()
 
 def run():
+    job()
+    print("First time scrape successfully!")
     schedule.every(1).hour.do(job)
 
     while True:
@@ -66,5 +68,5 @@ if __name__=="__main__":
     engine = create_engine(db_url)
     Session = sessionmaker(bind=engine)
     session = Session()
-    print("Connect Successfully!")
+    print("Connecting to database and starting scheduler...")
     run()
