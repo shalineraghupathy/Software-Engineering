@@ -41,19 +41,71 @@ html,body{
 }
 
 .page-header {
-background-color: #074b54;
-width:100%;
-padding-left: 20px;
-vertical-align: middle;
-display: flex;
-align-items: center;
-padding-top: 10px;
+    background-color: #074b54;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 左右内容分布 */
+}
+
+.left-content {
+    display: flex;
+    align-items: center;
+}
+
+.DB_logo {
+    width: 85px;
+    height: 85px;
+    margin-right: 10px; /* Logo 与标题间的间距 */
 }
 
 .text-center {
-    padding-left: 20px;
-    color: #5d878d;
+    color: #ffffff; /* 更亮的颜色，例如白色，以增强对比度 */
+    /* 如果需要，可以添加文本阴影来提高可读性 */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    margin-right: 10px; /* 维持原有间距 */
 }
+
+
+.news-button {
+    /* 新闻按钮的样式，根据需要调整 */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    /* 可以添加一些右边距来与页面右侧保持一定距离 */
+    margin-right: 20px;
+}
+
+.user-icon {
+    width: 80px; /* 调整为更大的尺寸 */
+    height: 80px; /* 保持宽高一致，假设你想要一个圆形图标 */
+    background-color: transparent; /* 或者是任何适合网页设计的颜色 */
+    border-radius: 50%; /* 圆形图标 */
+    margin-right: 10px;
+    /* 添加边框，如果需要 */
+    border: 2px solid #fff; /* 白色边框 */
+    /* 添加阴影，如果你喜欢 */
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+}
+
+.username {
+    margin-left: 20px;
+}
+
+
+.fa-user {
+    color: #fff;
+}
+
+
+
+
+
+/* If you need a tooltip-like effect beyond the 'title' attribute, you would need additional CSS */
 
 .container {
   min-height: 100vh;

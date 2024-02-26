@@ -17,6 +17,7 @@ google.charts.setOnLoadCallback(function () {
   dailyChart=new google.charts.Bar(document.getElementById('daily-chart'));
   predictionChart=new google.charts.Bar(document.getElementById('prediction-chart'));
 });
+
 function initMap (){
   infowindow = new google.maps.InfoWindow();
   let myLatLng = {lat: 53.350140, lng: -6.266155};//set the latitude and longitude to Dublin
