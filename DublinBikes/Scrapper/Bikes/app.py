@@ -5,6 +5,7 @@ import data
 import time
 import datetime
 
+
 def formatdate(value):
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(value))
 
@@ -15,9 +16,12 @@ def main():
     while True:
         params = {'apiKey': apiconfig.apiKey, 'contract': apiconfig.contract}
         response = requests.get(apiconfig.apiURI, params=params)
-        stations = response.json()
-        print("data retrived successfully")
-
+        if response.status_code == 200:
+            stations = response.json()
+            print("data retrived successfully")
+        else:
+            print(f"Error: {response.status_code}")
+        
         for station in stations:
             latitude = station.get('position', {}).get('lat', 0.0)
             longitude = station.get('position', {}).get('lng', 0.0)
