@@ -83,7 +83,7 @@ def main():
 
             weather.add_weather_data(weather_data)
             logging.info("Weather Data Updated!")
-            time.sleep(1 * 60)
+            time.sleep(30 * 60)
         else:
             logging.error(f"Error: {response.status_code}")
 
