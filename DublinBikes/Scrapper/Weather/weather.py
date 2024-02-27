@@ -74,23 +74,23 @@ class Weather(Base):
               
 
 # Create a SQLite database engine
-# db_url = URL.create(
-#     drivername='mysql+pymysql',
-#     username=dbconfig.username,
-#     password=dbconfig.password,
-#     host=dbconfig.dbEndpoint,
-#     port=dbconfig.port,
-#     database=dbconfig.dbName
-# )
-        
 db_url = URL.create(
     drivername='mysql+pymysql',
-    username="root",
-    password="Shachu@0203",
-    host="localhost",
-    port="3306",
-    database="dbikestest"
+    username=dbconfig.username,
+    password=dbconfig.password,
+    host=dbconfig.dbEndpoint,
+    port=dbconfig.port,
+    database=dbconfig.dbName
 )
+        
+# db_url = URL.create(
+#     drivername='mysql+pymysql',
+#     username="root",
+#     password="Shachu@0203",
+#     host="localhost",
+#     port="3306",
+#     database="dbikestest"
+
 
 engine = create_engine(db_url, echo=False)
 
