@@ -1,183 +1,150 @@
-#map {
-    position: relative;
+/* Custom styles for the page */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
 }
-#map-row{
-    height: 100vh;
-    overflow-y: hidden;
-    position:center;
-    width: 100%;
-    margin-left:auto;
-    margin-right:auto;
+
+.navbar {
+  background-color: black;
+  color: white;
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  overflow-y: auto;
+  z-index: 1;
 }
-.content-row{
-    height: 300px;
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: auto;
 }
-html,body{
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    width: 100%;
+
+.navbar li {
+  padding: 10px;
+  border-bottom: 1px solid #3d3b3b;
 }
-.btn-primary:active ,.btn-primary:focus{
-    background-color: white !important;
-    color: #074b54; !important;
+
+.navbar li a {
+  color: white;
+  text-decoration: none;
+  display: block;
 }
-.custom-map-control-button {
-  appearance: button;
-  background-color: #fff;
-  border: 0;
-  border-radius: 2px;
-  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  margin: 10px;
-  padding: 0 0.5em;
-  height: 40px;
-  font: 400 18px Roboto, Arial, sans-serif;
-  overflow: hidden;
-  color: black;
-}
-.custom-map-control-button:hover {
-  background: #ebebeb;
+
+.navbar li:hover {
+  background-color: blanchedalmond;
 }
 
 .page-header {
-    background-color: #074b54;
-    width: 100%;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* 左右内容分布 */
-}
-
-.left-content {
-    display: flex;
-    align-items: center;
-}
-
-.DB_logo {
-    width: 85px;
-    height: 85px;
-    margin-right: 10px; /* Logo 与标题间的间距 */
-}
-
-.text-center {
-    color: #ffffff; /* 更亮的颜色，例如白色，以增强对比度 */
-    /* 如果需要，可以添加文本阴影来提高可读性 */
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    margin-right: 10px; /* 维持原有间距 */
-}
-
-
-.news-button {
-    /* 新闻按钮的样式，根据需要调整 */
+  color: #ffffff;
+  padding: 10px;
+  display: flex;
+  flex-direction: row; /* Changed from column to row for horizontal alignment */
+  align-items: center;
+  justify-content: space-between; /* Adjusted for spacing between elements */
+  width: 100%; /* Ensure full width */
 }
 
 .user-info {
-    display: flex;
-    align-items: center;
-    color: #fff;
-    /* 可以添加一些右边距来与页面右侧保持一定距离 */
-    margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.user-info img {
+  object-fit: contain;
 }
 
 .user-icon {
-    width: 80px; /* 调整为更大的尺寸 */
-    height: 80px; /* 保持宽高一致，假设你想要一个圆形图标 */
-    background-color: transparent; /* 或者是任何适合网页设计的颜色 */
-    border-radius: 50%; /* 圆形图标 */
-    margin-right: 10px;
-    /* 添加边框，如果需要 */
-    border: 2px solid #fff; /* 白色边框 */
-    /* 添加阴影，如果你喜欢 */
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+  width: 50px; /* Adjusted for a more suitable size */
+  height: 50px; /* Adjusted for a more suitable size */
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .username {
-    margin-left: 20px;
+  color: white;
+  margin-left: 10px; /* Added margin for spacing */
 }
 
-
-.fa-user {
-    color: #fff;
+/* Adjusting the logo size */
+.DB_logo {
+  width: 80px; /* Adjusted the width for a better fit */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 17%; /*Gave rounded edges to logo for aesthetic look*/
 }
 
-
-
-
-
-/* If you need a tooltip-like effect beyond the 'title' attribute, you would need additional CSS */
-
-.container {
-  min-height: 100vh;
-  min-width: 95vw;
-  text-align:center;
+h1 {
+  font-size: 16px; /* Adjusted font size of logo for better fit*/
 }
 
-#dropdownMenu2 {
-background-color: #074b54;
+/* Additional styles for responsiveness and aesthetics */
+@media (max-width: 768px) {
+  .navbar {
+    width: 100px;
+  }
+
+  .DB_logo {
+    width: 80px; /* Smaller logo for smaller screens */
+  }
+
+  .user-icon {
+    width: 40px;
+    height: 40px;
+  }
 }
 
-.btn-primary {
-background-color: #074b54;
-border-color: white;
+.map-container {
+  position: relative;
+  width: calc(100% - 200px); /* 与侧边栏宽度对应调整宽度 */
+  margin-left: 200px; /* 为侧边栏留出空间 */
+  height: 500px; /* 地图容器高度 */
+  display: none; /* 确保地图容器显示 */
 }
 
-.h4, h4 {
-padding-top: 30px;
-    text-align: center;
-    color: #074b54;
-    font-size: 30px;
-}
-
-.justify-content-end {
-    display: inline-block;
-    padding: 20px;
-    justify-content: flex-end !important;
-}
-
-.col-4 {
-    padding-top: 20px;
-    flex: 0 0 auto;
-    width: 100%;
-}
-button {
-    color: white;
-    display: inline-block;
-    text-align: center;
-    background-color: #074b54;
-    font-color: white;
-    padding: 2px 6px;
-    font-size: 12px;
-}
-
-.row {
-    padding: 20px;
-}
-
-.footer {
-background:#074b54;
-height: 50px;
-color:white;
-text-align:center;
-position:relative;
-bottom:0px;
-left:0px;
-padding-top:20px;
-width:100%;
-}
-
-li {
-    display: list-item;
-    text-align: left;
-}
-
-.dropdown-menu.show {
-    height: 300px;
-    display: block;
-    overflow: auto;
-}
-
-.col-1 {
+/* 地图顶部的控件容器 */
+.map-top-controls {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 10px; /* 控件与容器边缘的间距 */
+  z-index: 5; /* 确保控件显示在地图之上 */
+}
+
+.map-search input,
+.map-search button,
+.map-buttons button,
+.charts-dropdown button {
+  margin-right: 10px; /* 元素间的间距 */
+}
+
+/* 确保下拉列表样式与Bootstrap一致 */
+.charts-dropdown .dropdown-menu {
+  position: absolute;
+  top: 100%; /* 下拉列表显示在按钮下方 */
+  left: 0;
+  z-index: 1000;
+}
+
+/* 地图容器样式 */
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+/* 其他样式维持不变 */
+
+/* 地图容器 */
+#map {
+  position: absolute;
+  top: 100px; /* 地图位于搜索框和按钮下方 */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 50px); /* 地图高度减去搜索框和按钮的高度 */
 }
