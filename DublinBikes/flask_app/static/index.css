@@ -1,10 +1,30 @@
-/* Custom styles for the page */
+/* Footer styles */
+.footer {
+  background-color: #333; /* 可以根据需要调整背景色 */
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* 根据需要调整高度 */
+  left: 0;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 确保内容区域填满整个视窗高度 */
   margin: 0;
   padding: 0;
-  display: flex;
 }
+
+/* 在body内容区域添加padding-bottom，与footer的高度相同，避免内容被footer遮盖 */
+main {
+  flex: 1;
+  padding-bottom: 60px; /* 应与footer高度相匹配 */
+}
+
 
 .navbar {
   background-color: black;

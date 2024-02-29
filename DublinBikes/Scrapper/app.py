@@ -16,7 +16,7 @@ def main():
         params = {'apiKey': apiconfig.apiKey, 'contract': apiconfig.contract}
         response = requests.get(apiconfig.apiURI, params=params)
         stations = response.json()
-        print("data retrived successfully")
+        print("data retrieve successfully")
 
         for station in stations:
             latitude = station.get('position', {}).get('lat', 0.0)
