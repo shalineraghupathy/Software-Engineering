@@ -21,6 +21,10 @@
     <link rel="stylesheet" href="../static/index.css" />
   </head>
   <body>
+    <button id="toggleNav" class="toggle-nav-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+
     <div class="navbar">
       <div class="page-header">
         <img class="DB_logo" src="../static/db_logo.jpg" alt="logo" />
@@ -38,19 +42,19 @@
     </div>
 
     <div class="map-container" id="mapContainer">
-      <!-- 地图顶部控件 -->
+      <!-- Map top controls -->
       <div class="map-top-controls">
-        <!-- 搜索框 -->
+        <!-- Search box -->
         <div class="map-search">
           <input type="text" placeholder="Search Station..." />
           <button>Search Stations</button>
         </div>
-        <!-- 地图按钮 -->
+        <!-- Map buttons -->
         <div class="map-buttons">
           <button id="free-bikes-btn">Free Bikes</button>
           <button id="free-stands-btn">Free Stations</button>
         </div>
-        <!-- 图表下拉列表 -->
+        <!-- Charts dropdown -->
         <div class="charts-dropdown">
           <button
             class="btn btn-secondary dropdown-toggle"
@@ -79,7 +83,7 @@
           </ul>
         </div>
       </div>
-      <!-- 地图容器 -->
+      <!-- Map container -->
       <div id="map" style="height: 500px"></div>
     </div>
     <footer class="footer">
@@ -89,7 +93,7 @@
     </footer>
     <!-- Custom JavaScript -->
     <script src="../static/index.js"></script>
-    <!-- Bootstrap JavaScript 库 -->
+    <!-- Bootstrap JavaScript libraries -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
     <script
       async
