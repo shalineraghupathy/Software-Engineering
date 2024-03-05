@@ -1,0 +1,191 @@
+/* Footer styles */
+.footer {
+  background-color: #333; /* Adjust the background color as needed */
+  color: white;
+  padding: 30px;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px; /* Adjust the height as needed */
+  left: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the content area fills the entire viewport height */
+  margin: 0;
+  padding: 0;
+  background-color: #333;
+}
+
+/* Add padding-bottom to the body content area, matching the height of the footer, to avoid content being covered by the footer */
+main {
+  flex: 1;
+  padding-bottom: 60px; /* Should match the height of the footer */
+}
+
+.toggle-nav-btn {
+  position: absolute;
+  left: 20px; /* Adjust to a suitable value */
+  top: 20px; /* Adjust to a suitable value */
+  z-index: 1050; /* High enough to ensure it's above other elements */
+  background-color: #151515; /* A distinct color */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.hidden {
+  display: none; /* Hide the element */
+}
+
+.fullwidth {
+  width: 100%;
+  margin-left: 0; /* Remove left margin */
+}
+
+.navbar {
+  background-color: black;
+  color: white;
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: auto;
+}
+
+.navbar li {
+  padding: 10px;
+  border-bottom: 1px solid #3d3b3b;
+}
+
+.navbar li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+.navbar li:hover {
+  background-color: blanchedalmond;
+}
+
+.page-header {
+  color: #ffffff;
+  padding: 10px;
+  display: flex;
+  flex-direction: row; /* Changed from column to row for horizontal alignment */
+  align-items: center;
+  justify-content: space-between; /* Adjusted for spacing between elements */
+  width: 100%; /* Ensure full width */
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-info img {
+  object-fit: contain;
+}
+
+.user-icon {
+  width: 50px; /* Adjusted for a more suitable size */
+  height: 50px; /* Adjusted for a more suitable size */
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.username {
+  color: white;
+  margin-left: 10px; /* Added margin for spacing */
+}
+
+/* Adjusting the logo size */
+.DB_logo {
+  width: 80px; /* Adjusted the width for a better fit */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 17%; /* Rounded edges for the logo for aesthetic look */
+}
+
+h1 {
+  font-size: 16px; /* Adjusted font size of the logo for better fit */
+}
+
+/* Additional styles for responsiveness and aesthetics */
+@media (max-width: 768px) {
+  .navbar {
+    width: 100px;
+  }
+
+  .DB_logo {
+    width: 80px; /* Smaller logo for smaller screens */
+  }
+
+  .user-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.map-container {
+  transition: margin-left 0.5s, width 0.5s; /* Smooth transition effect */
+  position: relative;
+  width: calc(100% - 200px); /* Initial width, considering the width of the navbar */
+  margin-left: 200px; /* Corresponding to the width of the navbar */
+  height: 700px;
+}
+
+/* Container for the top controls of the map */
+.map-top-controls {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px; /* Spacing between controls and container edges */
+  z-index: 5; /* Ensure controls are displayed above the map */
+}
+
+.map-search input,
+.map-search button,
+.map-buttons button,
+.charts-dropdown button {
+  margin-right: 10px; /* Spacing between elements */
+}
+
+/* Ensure the dropdown menu style is consistent with Bootstrap */
+.charts-dropdown .dropdown-menu {
+  position: absolute;
+  top: 100%; /* Dropdown menu displayed below the button */
+  left: 0;
+  z-index: 1000;
+}
+
+/* Map container styles */
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+/* Other styles remain unchanged */
+
+/* Map container */
+#map {
+  position: absolute;
+  top: 80px; /* Map is located below the search box and buttons */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 50px); /* Map height minus the height of the search box and buttons */
+}

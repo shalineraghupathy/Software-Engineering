@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dublin Bikes - Simple Version</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    color: #333;
+    font-size: 36px;
+    margin-top: 0;
+  }
+
+  p.explanation {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+
+  .image-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  img {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    margin: 10px;
+  }
+
+  h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  li {
+    flex-basis: calc(33.33% - 20px);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+
+  li a {
+    display: block;
+    padding: 10px;
+    background-color: #f0f0f0;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  li a:hover {
+    background-color: #e0e0e0;
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Dublin Bikes - Simple Version</h1>
+    <p class="explanation">This page is a simplified version of the Dublin Bikes interface for fun and aesthetic purposes.</p>
+    <div class="image-container">
+      <!-- Add your images here -->
+      <img src="../static/rentBike.svg" alt="Rent a bike">
+      <img src="../static/useBike.svg" alt="Using the service">
+      <img src="../static/returnBike.svg" alt="Return a bike">
+    </div>
+  </header>
+
+  <h2>How Does It Work?</h2>
+  <ul>
+    <li><a href="#">Rent a bike</a></li>
+    <li><a href="#">Using the service</a></li>
+    <li><a href="#">Return a bike</a></li>
+    <!-- Other list items -->
+  </ul>
+</div>
+</body>
+</html>
