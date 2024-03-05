@@ -4,6 +4,7 @@ import config.apiconfig as apiconfig
 import data
 import time
 import datetime
+import simplejson as json
 
 def formatdate(value):
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(value))
@@ -15,8 +16,11 @@ def main():
     while True:
         params = {'apiKey': apiconfig.apiKey, 'contract': apiconfig.contract}
         response = requests.get(apiconfig.apiURI, params=params)
-        stations = response.json()
-        print("data retrived successfully")
+        stations = response.json() 
+        print("data retrieve successfully")
+        with open("C:\Users\faisa\OneDrive\Desktop\Dublin Bikes Project\Software-Engineering\DublinBikes\stations.json", "w") as json_file:
+            json.dump(stations, json_file)
+            
 
         for station in stations:
             latitude = station.get('position', {}).get('lat', 0.0)
