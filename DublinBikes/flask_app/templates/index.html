@@ -27,13 +27,14 @@
 
     <div class="navbar">
       <div class="page-header">
-        <img class="DB_logo" src="../static/db_logo.jpg" alt="Logo" />
+        <img class="DB_logo" src="../static/db_logo.png" alt="Logo" />
         <h1>Dublin Bikes</h1>
       </div>
       <ul>
+        <li><a href="#map" class="clickMap">Map</a></li>
         <li><a href="./Overall.html">Overall</a></li>
         <li><a href="https://www.dublinbikes.ie/en/newscast">News</a></li>
-        <li><a href="#map" class="clickMap">Map</a></li>
+
       </ul>
       <div class="user-info">
         <img src="../static/UCD.jpeg" alt="User Icon" class="user-icon" />
@@ -42,18 +43,23 @@
     </div>
 
     <div class="map-container" id="mapContainer">
+      <div id="stationInfo" class="station-info hidden">
+        <!-- 站点信息将在这里动态填充 -->
+      </div>
+
       <!-- Map top controls -->
       <div class="map-top-controls">
         <!-- Search box -->
         <div class="map-search">
-          <input type="text" placeholder="Search Station..." />
-          <button>Search Stations</button>
+          <input type="text" id="searchInput" placeholder="Enter Station">
+          <button id="searchButton">Search</button>
         </div>
         <!-- Map buttons -->
         <div class="map-buttons">
           <button id="free-bikes-btn">Free Bikes</button>
           <button id="free-stands-btn">Free Stations</button>
         </div>
+        <div class="weather-info" id="weatherInfo">Loading weather...</div>
         <!-- Charts dropdown -->
         <div class="charts-dropdown">
           <button
@@ -63,7 +69,7 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Charts
+            Predictions
           </button>
           <ul class="dropdown-menu" aria-labelledby="chartsDropdown">
             <li>
@@ -73,18 +79,17 @@
             <li>
               <a class="dropdown-item" href="#predictionchart">Prediction Chart</a>
             </li>
-            <li>
-              <a class="dropdown-item" href="#weatherforecast">Weather Forecast</a>
-            </li>
           </ul>
         </div>
+
+
       </div>
       <!-- Map container -->
-      <div id="map" style="height: 770px"></div>
+      <div id="map" style="height: 600px"></div>
     </div>
     <footer class="footer">
       <div class="container">
-        <p class="text-center">COMP30830 Software Design by Yuhang Lian & Shaline & Arslan, 2024</p>
+        <p class="text-center">COMP30830 Software-DublinBike Design by Yuhang Lian, 2024</p>
       </div>
     </footer>
     <!-- Custom JavaScript -->
@@ -92,9 +97,9 @@
     <!-- Bootstrap JavaScript library -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
     <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&callback=initMap"
       async
       defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&callback=initMap"
     ></script>
   </body>
 </html>

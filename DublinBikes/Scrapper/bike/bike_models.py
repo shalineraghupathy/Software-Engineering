@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-import config.dbconfig as dbconfig
+import DublinBikes.Scrapper.bike.config.dbconfig as dbconfig
 from sqlalchemy.engine.url import URL
 
 Base = declarative_base()
@@ -117,3 +117,5 @@ def add_availability_data(data):
             # print("Added new availability - ", availability)
     except Exception as e:
         print(f"Error: {e}")
+
+

@@ -1,14 +1,15 @@
 /* Footer styles */
 .footer {
-  background-color: #333; /* Adjust the background color as needed */
-  color: white;
-  padding: 30px;
+  background-color: #222a22; /* Adjust the background color as needed */
+  color: #40fc93;
+  padding: 15px;
   text-align: center;
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   width: 100%;
-  height: 30px; /* Adjust the height as needed */
+  height: 20px; /* Adjust the height as needed */
   left: 0;
+  font-size: 0.8em;
 }
 
 body {
@@ -17,7 +18,7 @@ body {
   min-height: 100vh; /* Ensure the content area fills the entire viewport height */
   margin: 0;
   padding: 0;
-  background-color: #333;
+  background-color: #242c24;
 }
 
 /* Add padding-bottom to the body content area, matching the height of the footer, to avoid content being covered by the footer */
@@ -32,7 +33,7 @@ main {
   top: 20px; /* Adjust to a suitable value */
   z-index: 1050; /* High enough to ensure it's above other elements */
   background-color: #151515; /* A distinct color */
-  color: white;
+  color: #3ffc92;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -48,8 +49,8 @@ main {
 }
 
 .navbar {
-  background-color: black;
-  color: white;
+  background-color: #0e150e;
+  color: #3ffc92;
   height: 100vh;
   width: 200px;
   position: fixed;
@@ -60,26 +61,52 @@ main {
 .navbar ul {
   list-style-type: none;
   padding: 0;
-  margin: auto;
+  margin: 0 auto; /* 修改为自动居中 */
+  display: flex;
+  flex-direction: column; /* 更改为垂直排列 */
+  justify-content: center; /* 主轴居中对齐 */
+  align-items: center; /* 交叉轴居中对齐 */
 }
 
 .navbar li {
-  padding: 10px;
-  border-bottom: 1px solid #3d3b3b;
+  padding: 15px 20px; /* 增加内边距使按钮更大且间距更明显 */
+  border-bottom: none; /* 移除下划线，改用hover效果 */
+  transition: all 0.3s ease; /* 添加过渡动画 */
+
+  &:hover {
+    background-color: rgba(61, 59, 59, 0.8); /* 鼠标悬停时变暗 */
+
+  }
 }
 
 .navbar li a {
-  color: white;
+  color: #3ffc92;
   text-decoration: none;
+  font-size: 1.4em;
   display: block;
-}
+  position: relative; /* 为下划线动画设置相对定位 */
 
-.navbar li:hover {
-  background-color: blanchedalmond;
+  &::after { /* 创建下划线动画 */
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #3ffc92;
+    opacity: 0;
+    transform: scaleX(0);
+    transition: all 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
 }
 
 .page-header {
-  color: #ffffff;
+  color: #3ffc92;
   padding: 10px;
   display: flex;
   flex-direction: row; /* Changed from column to row for horizontal alignment */
@@ -101,12 +128,12 @@ main {
   width: 50px; /* Adjusted for a more suitable size */
   height: 50px; /* Adjusted for a more suitable size */
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid #3ffc92;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .username {
-  color: white;
+  color: #3ffc92;
   margin-left: 10px; /* Added margin for spacing */
 }
 
@@ -115,10 +142,23 @@ main {
   width: 80px; /* Adjusted the width for a better fit */
   height: auto; /* Maintain aspect ratio */
   border-radius: 17%; /* Rounded edges for the logo for aesthetic look */
+  /* 添加悬停时的缩放和平移动画 */
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1) translateY(-5px); /* 悬停时放大并轻微上浮 */
+  }
 }
 
 h1 {
-  font-size: 16px; /* Adjusted font size of the logo for better fit */
+  font-size: 25px; /* Adjusted font size of the logo for better fit */
+  animation: fadeIn 1s ease-in-out forwards;
+
+  /* 定义fadeIn动画 */
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
 }
 
 /* Additional styles for responsiveness and aesthetics */
@@ -128,7 +168,7 @@ h1 {
   }
 
   .DB_logo {
-    width: 80px; /* Smaller logo for smaller screens */
+    width: 40px; /* Smaller logo for smaller screens */
   }
 
   .user-icon {
@@ -145,24 +185,79 @@ h1 {
   height: 700px;
 }
 
+.station-info {
+  position: fixed; /* 悬浮在页面上 */
+  top: 20%; /* 距离页面顶部的位置 */
+  right: 20px; /* 距离页面右边的距离 */
+  background-color: rgba(240, 248, 240, 0.98);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 1000; /* 确保它在地图上方 */
+  display: none; /* 初始不显示 */
+  opacity: 0; /* 初始透明度为0 */
+  transition: opacity 0.5s ease-in-out; /* 平滑过渡效果 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+}
+
+/* 当移除.hidden类时显示，并淡入 */
+.station-info:not(.hidden) {
+  display: block;
+  opacity: 1; /* 完全可见 */
+}
+
+/* 鼠标悬停时增加阴影效果 */
+.station-info:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 阴影效果增强 */
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
 /* Container for the top controls of the map */
 .map-top-controls {
   position: absolute;
-  top: 15px;
-  left: 0;
-  right: 0;
+  top: 10px;
+  left: 5px;
+  right: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 10px; /* Spacing between controls and container edges */
+  padding: 15px 15px; /* Spacing between controls and container edges */
   z-index: 5; /* Ensure controls are displayed above the map */
 }
 
+/* 添加圆角、阴影和动画效果 */
 .map-search input,
 .map-search button,
 .map-buttons button,
 .charts-dropdown button {
-  margin-right: 10px; /* Spacing between elements */
+  margin-right: 10px; /* 保持元素之间的间距不变 */
+  padding: 5px 15px; /* 调整内边距以适应按钮大小 */
+  border-radius: 50px; /* 添加大圆角让按钮看起来更有趣 */
+  background-color: #4CAF50; /* 设置背景颜色 */
+  color: #fad8d8; /* 设置字体颜色 */
+  border: none; /* 移除边框 */
+  cursor: pointer; /* 当鼠标悬停时显示手型光标 */
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3); /* 添加阴影效果 */
+
+  /* 添加过渡动画 */
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #e1f6e1; /* 鼠标悬停时改变背景色 */
+    transform: translateY(-2px); /* 给按钮添加轻微上浮的悬停效果 */
+  }
+}
+
+#searchButton {
+  background-color: #3e8e41;
+  font-size: 0.9em;
+  caret-color: #2d3520;
 }
 
 /* Ensure the dropdown menu style is consistent with Bootstrap */
@@ -172,6 +267,42 @@ h1 {
   left: 0;
   z-index: 1000;
 }
+.weather-info {
+  background-color: #4db051;
+  border: none; /* 去除边框 */
+  padding: 10px 15px; /* 调整内边距 */
+  border-radius: 20px; /* 更大圆角以实现有趣的视觉效果 */
+  display: inline-block;
+  margin: 0 0; /* 调整上下边距，增加间隔 */
+  color: #3ffc92;
+
+  /* 添加阴影效果 */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+
+  /* 文本鼠标悬停效果 */
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #4a4848; /* 鼠标悬停时改变背景色 */
+    transform: translateY(-2px); /* 给元素添加轻微上浮的悬停效果 */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4); /* 鼠标悬停时增强阴影效果 */
+  }
+}
+
+.weather-info img {
+  width: 30px; /* 调整图标大小 */
+  height: 30px; /* 保持图标的宽高一致 */
+  vertical-align: middle; /* 确保图标和文本垂直居中 */
+}
+
+.weather-info span {
+  font-size: 16px;
+  margin-left: 5px; /* 减少文本和图标之间的间距 */
+  vertical-align: middle; /* 确保文本垂直居中 */
+
+}
+
+
 
 /* Map container styles */
 #map {

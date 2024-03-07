@@ -1,7 +1,7 @@
 
 import requests
-import config.apiconfig as apiconfig
-import data
+import DublinBikes.Scrapper.bike.config.apiconfig as apiconfig
+import bike_models
 import time
 import datetime
 
@@ -47,8 +47,8 @@ def main():
             }
 
 
-            data.add_or_update_station_data(station_data)
-            data.add_availability_data(availability_data)
+            bike_models.add_or_update_station_data(station_data)
+            bike_models.add_availability_data(availability_data)
         print("Records pushed to db",datetime.datetime.now())
         print("Next load starts in 5 minutes")
         time.sleep(5 * 60)
