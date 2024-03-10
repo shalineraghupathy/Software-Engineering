@@ -57,6 +57,45 @@ def search_stations():
     session.close()
     return jsonify({'stations': station_data})
 
+
+@app.route('/api/stations', methods=['GET'])
+def get_stations():
+    # 获取所有站点的静态信息
+    session = db.session
+    stations = session.query(Station).all()
+    station_data = [
+        {
+            'number': station.number,
+            'name': station.name,
+            'address': station.address,
+            'position_lat': station.position_lat,
+            'position_long': station.position_long,
+            'bike_stands': station.bike_stands,
+            # 不包括动态数据，如available_bikes和available_bike_stands
+        }
+        for station in stations
+    ]
+    session.close()
+    return jsonify({'stations': station_data})
+
+@app.route('/api/availabilities', methods=['GET'])
+def get_availabilities():
+    # 获取所有站点的动态可用性信息
+    session = db.session
+    availabilities = session.query(Availability).all()
+    availability_data = [
+        {
+            'number': availability.number,
+            'available_bikes': availability.available_bikes,
+            'available_bike_stands': availability.available_bike_stands,
+            'last_update': availability.last_update,
+            'status': availability.status
+        }
+        for availability in availabilities
+    ]
+    session.close()
+    return jsonify({'availabilities': availability_data})
+
 @app.route('/api/weather', methods=['GET'])
 def get_weather():
     api_key = '5b103a5aa9cd52cd178d63c3c83ad6ec'
