@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-import config.dbconfig as dbconfig
+from Scrapper.config import dbconfig
 from sqlalchemy.engine.url import URL
 
 Base = declarative_base()

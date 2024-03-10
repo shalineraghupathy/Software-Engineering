@@ -18,7 +18,7 @@ def main():
         response = requests.get(apiconfig.apiURI, params=params)
         stations = response.json() 
         print("data retrieve successfully")
-        with open("C:\Users\faisa\OneDrive\Desktop\Dublin Bikes Project\Software-Engineering\DublinBikes\stations.json", "w") as json_file:
+        with open("C:\\Users\\faisa\\OneDrive\\Desktop\\Dublin Bikes Project\\Software-Engineering\\DublinBikes\\stations.json", "w") as json_file:
             json.dump(stations, json_file)
             
 

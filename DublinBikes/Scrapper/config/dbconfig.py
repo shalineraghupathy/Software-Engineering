@@ -1,5 +1,0 @@
-username = 'evanSE'
-password = '2686336654lyh'
-dbName = 'DublinBike'
-dbEndpoint = 'dublinbike-database.cx6eqc4uyqzi.eu-north-1.rds.amazonaws.com'
-port = '3306'
