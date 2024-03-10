@@ -183,19 +183,19 @@ function updateMarkerIcons(markers, availability) {
     if (availableBikes > 0) {
       // 如果有空闲自行车，更改图标
       marker.setIcon({
-        url: '/bike_free.png', // 替换为你的空闲自行车图标路径
+        url: '../static/bike_free.png', // 替换为你的空闲自行车图标路径
         scaledSize: new google.maps.Size(32, 32), // 根据需要调整图标大小
       });
     } else if (availableStands > 0) {
       // 如果有空闲停车位，更改图标
       marker.setIcon({
-        url: 'path/to/free-stands-icon.png', // 替换为你的空闲停车位图标路径
+        url: '../static/no_station.png', // 替换为你的空闲停车位图标路径
         scaledSize: new google.maps.Size(32, 32), // 根据需要调整图标大小
       });
     } else {
       // 如果没有空闲自行车或停车位，使用默认图标
       marker.setIcon({
-        url: '/no_bike.png', // 替换为你的默认图标路径
+        url: '../static/no_bike.png', // 替换为你的默认图标路径
         scaledSize: new google.maps.Size(32, 32), // 根据需要调整图标大小
       });
     }
