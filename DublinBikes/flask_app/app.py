@@ -71,7 +71,6 @@ def get_stations():
             'position_lat': station.position_lat,
             'position_long': station.position_long,
             'bike_stands': station.bike_stands,
-            # 不包括动态数据，如available_bikes和available_bike_stands
         }
         for station in stations
     ]
