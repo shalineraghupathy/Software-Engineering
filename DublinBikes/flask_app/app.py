@@ -133,7 +133,7 @@ def free_bikes():
     ]
     return jsonify({'stations': station_data})
 
-@app.route('/api/free-stations', methods=['GET'])
+@app.route('/api/free-stands', methods=['GET'])
 def free_stands():
     stations_with_free_stands = db.session.query(Station).join(Availability).filter(Availability.available_bike_stands > 0).all()
     station_data = [
