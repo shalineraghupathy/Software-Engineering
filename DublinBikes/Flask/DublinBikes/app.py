@@ -23,25 +23,21 @@ def index():
             marker = {
                 'number': station['number'],
                 'postion': {'lat': latitude,'lng':longitude},
-                'title': station['name'],
+                'title': station[' name'],
                 'status': station['status'],
                 'bike_stands': station['bike_stands'],
                 'available_bikes': station['available_bikes'],
             }
 
             markers.append(marker)
-            print(markers)
+        # print(markers)
 
         # Render the template with API key, markers, and specified lat and lng
-        return render_template("index.html")
+        return render_template("index.html",data=markers)
     except:
         print(traceback.format_exc())
-        return "error in index", 404
-    
-# @app.route("/stations")
-# def get_stations():
-    
+        return "error in index", 404  
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(debug=True)
