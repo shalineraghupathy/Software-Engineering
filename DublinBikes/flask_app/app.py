@@ -5,12 +5,13 @@ import requests
 from flask import Flask, render_template
 from flask_cors import CORS
 from DublinBikes.Scrapper.bike.bike_models import Station, Availability
+
 # 从环境变量中读取敏感信息
 api_key = os.getenv('OPENWEATHERMAP_API_KEY', "5b103a5aa9cd52cd178d63c3c83ad6ec")
-db_username = os.getenv('DB_USERNAME', 'evanSE')
-db_password = os.getenv('DB_PASSWORD', '2686336654lyh')
-db_name = os.getenv('DB_NAME', 'DublinBike')
-db_endpoint = os.getenv('DB_ENDPOINT', 'dublinbike-database.cx6eqc4uyqzi.eu-north-1.rds.amazonaws.com')
+db_username = os.getenv('DB_USERNAME', 'admin')
+db_password = os.getenv('DB_PASSWORD', 'qwerty123')
+db_name = os.getenv('DB_NAME', 'dublinbikes')
+db_endpoint = os.getenv('DB_ENDPOINT', 'dublinbikes.ch2g8eocy1o4.eu-west-1.rds.amazonaws.com')
 db_port = os.getenv('DB_PORT', '3306')
 
 # 设置 Flask 应用和数据库
