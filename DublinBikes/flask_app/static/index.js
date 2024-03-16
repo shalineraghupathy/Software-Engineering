@@ -7,8 +7,38 @@ const customMarkerIconUrls = {
     searched: '../static/search-result.png'
 };
 
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const userPos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            // 在地图上显示用户位置
+            showUserPosition(userPos);
+        }, function() {
+            alert('获取用户位置失败。');
+        });
+    } else {
+        // 浏览器不支持 Geolocation
+        alert('浏览器不支持 Geolocation。');
+    }
+}
+function showUserPosition(position) {
+    const marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        title: "您的位置",
+        icon: {
+            url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' // 使用蓝色标记表示用户位置
+        }
+    });
+    map.setCenter(position); // 将地图中心移动到用户位置
+}
+
 // Initialize the map and load static station data
 function initMap() {
+    getUserLocation();
     const dublin = { lat: 53.349805, lng: -6.26031 };
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 14,
