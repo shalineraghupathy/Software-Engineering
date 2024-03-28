@@ -2,6 +2,7 @@ var map;
 var centerMap;
 var markers = [];
 var stationsdata = [];
+var selectedLocationMarker;
 function fetchStationData() {
   return fetch("/stations")
     .then((response) => {
@@ -283,6 +284,20 @@ function initAutocomplete() {
     }
 
     var selectedLocation = place.geometry.location;
+    if (selectedLocationMarker) {
+      selectedLocationMarker.setMap(null);
+    }
+
+    // Create a new marker at the selected location
+    selectedLocationMarker = new google.maps.Marker({
+      position: selectedLocation,
+      map: map,
+      title: place.name,
+      icon: {
+        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        scaledSize: new google.maps.Size(40, 40),
+      },
+    });
 
     stationsdata.forEach((station) => {
       const stationLocation = new google.maps.LatLng(station.lat, station.lng);
@@ -290,7 +305,7 @@ function initAutocomplete() {
         selectedLocation,
         stationLocation
       );
-      station.distance = distance; // Add distance to the station object
+      station.distance = Math.round(distance); // Add distance to the station object
     });
 
     // Sort stations by distance
@@ -300,7 +315,39 @@ function initAutocomplete() {
     const top5Stations = sortedStations.slice(0, 5);
 
     loadStationCoordinates(top5Stations);
+
+    var stationList = document.getElementById("stationList");
+    stationList.innerHTML = ""; // Clear current list
+
+    top5Stations.forEach((station) => {
+      var elem = document.createElement("div");
+      elem.classList.add("card");
+      elem.innerHTML = `<h4>${station.title}</h4>
+                          <p>Bikes available: ${station.available_bikes}</p>
+                          <p>Stands available: ${station.available_bike_stands}</p>
+                          <p>Distance: ${station.distance} m</p>`;
+      stationList.appendChild(elem);
+    });
+
+    // Open the panel
+    openPanel();
   });
+}
+function openPanel() {
+  document.getElementById("stationDetailsPanel").classList.add("open");
+  document.querySelector(".content").classList.remove("fullwidth");
+  document.querySelector(".content").classList.add("split");
+}
+
+function closePanel() {
+  document.getElementById("stationDetailsPanel").classList.remove("open");
+  document.querySelector(".content").classList.remove("split");
+  document.querySelector(".content").classList.add("fullwidth");
+  loadStationCoordinates(stationsdata);
+  document.getElementById("autocomplete").value = "";
+  if (selectedLocationMarker) {
+    selectedLocationMarker.setMap(null);
+  }
 }
 
 function loadStationCoordinates(stationsdata) {
