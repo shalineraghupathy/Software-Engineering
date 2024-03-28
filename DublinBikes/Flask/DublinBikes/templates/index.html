@@ -18,6 +18,20 @@
 
     <!-- Content -->
     <div class="content">
+      <div class="search-container">
+        <input
+          id="autocomplete"
+          type="text"
+          placeholder="Search..."
+          class="search-input"
+        />
+        <button type="button" class="search-button">
+          <img
+            src="https://www.dublinbikes.ie/assets/icons/svg/loupe-recherche.svg"
+            alt="Search"
+          />
+        </button>
+      </div>
       <div id="map"></div>
     </div>
 
@@ -26,10 +40,16 @@
       <p>&copy; 2024 Dublin Bikes.</p>
     </footer>
   </body>
+  <!-- <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&callback=initMap&libraries=places"
+    async
+    defer
+  ></script> -->
   <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&libraries=places,geometry&callback=initMap"
     async
     defer
   ></script>
+
   <script src="../static/scripts.js"></script>
 </html>

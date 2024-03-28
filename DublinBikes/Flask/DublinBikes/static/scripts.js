@@ -1,19 +1,26 @@
+var map;
+var centerMap;
+var markers = [];
+var stationsdata = [];
+function fetchStationData() {
+  return fetch("/stations")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Could not fetch station data: ", error);
+      return []; // Ensure this catches and handles fetch errors
+    });
+}
+
 async function initMap() {
-  //     const markers = {{data}}
-  //   markers.forEach((markerData) => {
-  //     const marker = new google.maps.Marker({
-  //       position: markerData.postion,
-  //       map: map,
-  //       title: markerData.title,
-  //     });
-
-  //     markers.push(marker);
-  //   });
-
-  const centerMap = { lat: 53.3419077, lng: -6.2617028 };
+  centerMap = { lat: 53.3419077, lng: -6.2617028 };
   const mapOptions = {
     center: centerMap,
-    zoom: 13,
+    zoom: 14,
     disableDefaultUI: true,
     styles: [
       {
@@ -222,5 +229,135 @@ async function initMap() {
       },
     ],
   };
-  const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  // Initialise map
+  const { Map } = await google.maps.importLibrary("maps");
+  map = new Map(document.getElementById("map"), mapOptions);
+  fetchStationData()
+    .then((data) => {
+      stationsdata = data.stations;
+    })
+    .catch((error) => {
+      console.error("Error loading station data:", error);
+    });
+  initAutocomplete();
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        var marker = new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: "Your Location",
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/128/6735/6735939.png", // Example custom icon
+            scaledSize: new google.maps.Size(40, 40), // Size in pixels
+          },
+          //   https://cdn-icons-png.flaticon.com/128/6735/6735939.png
+        });
+        map.setCenter(pos);
+        loadStationCoordinates(stationsdata);
+      },
+      function () {
+        handleLocationError(true, map.getCenter());
+      }
+    );
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, map.getCenter());
+  }
+}
+
+function initAutocomplete() {
+  var input = document.getElementById("autocomplete");
+  var autocomplete = new google.maps.places.Autocomplete(input);
+
+  autocomplete.addListener("place_changed", async function () {
+    var place = autocomplete.getPlace();
+    if (!place.geometry) {
+      window.alert("No details available for input: '" + place.name + "'");
+      return;
+    }
+
+    var selectedLocation = place.geometry.location;
+
+    stationsdata.forEach((station) => {
+      const stationLocation = new google.maps.LatLng(station.lat, station.lng);
+      const distance = google.maps.geometry.spherical.computeDistanceBetween(
+        selectedLocation,
+        stationLocation
+      );
+      station.distance = distance; // Add distance to the station object
+    });
+
+    // Sort stations by distance
+    const sortedStations = stationsdata.sort((a, b) => a.distance - b.distance);
+
+    // Select top 5 nearest stations
+    const top5Stations = sortedStations.slice(0, 5);
+
+    loadStationCoordinates(top5Stations);
+  });
+}
+
+function loadStationCoordinates(stationsdata) {
+  // Clear existing markers from the map
+  markers.forEach((marker) => marker.setMap(null));
+  markers = []; // Clear the array
+  var infoWindow = new google.maps.InfoWindow();
+
+  stationsdata.forEach((station) => {
+    var marker = new google.maps.Marker({
+      position: { lat: station.lat, lng: station.lng },
+      map: map,
+      title: station.name,
+      icon: {
+        url: "https://cdn-icons-png.flaticon.com/512/6984/6984914.png",
+        scaledSize: new google.maps.Size(40, 40), // Size in pixels
+      },
+    });
+
+    // Create the content for the InfoWindow
+    const content = `<div class="container">
+                          <h1>${station.number} ${station.title}</h1>
+                          <div class="icons">
+                              <span class="icon"> <img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="20px" height="20px"> ${station.available_bikes}</span>
+                              <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Bikes" width="20px" height="20px"> ${station.available_bike_stands}</span>
+                          </div>
+                      </div>`;
+
+    // Add mouseover event listener to show the InfoWindow
+    marker.addListener("mouseover", () => {
+      infoWindow.setContent(content);
+      infoWindow.open(map, marker);
+    });
+
+    // Add mouseout event listener to close the InfoWindow
+    marker.addListener("mouseout", () => {
+      infoWindow.close();
+    });
+
+    markers.push(marker);
+  });
+
+  // Adjust the map view to include all new markers
+  if (markers.length) {
+    let bounds = new google.maps.LatLngBounds();
+    markers.forEach((marker) => bounds.extend(marker.getPosition()));
+    map.fitBounds(bounds);
+  }
+}
+
+function handleLocationError(browserHasGeolocation, pos) {
+  var infoWindow = new google.maps.InfoWindow();
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(
+    browserHasGeolocation
+      ? "Error: The Geolocation service failed."
+      : "Error: Your browser doesn't support geolocation."
+  );
+  infoWindow.open(map);
 }

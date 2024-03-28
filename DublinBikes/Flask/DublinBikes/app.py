@@ -22,8 +22,8 @@ def index():
 
             marker = {
                 'number': station['number'],
-                'postion': {'lat': latitude,'lng':longitude},
-                'title': station[' name'],
+                'position': {'lat': latitude,'lng':longitude},
+                'title': station['name'],
                 'status': station['status'],
                 'bike_stands': station['bike_stands'],
                 'available_bikes': station['available_bikes'],
@@ -37,6 +37,30 @@ def index():
     except:
         print(traceback.format_exc())
         return "error in index", 404  
+    
+@app.route('/stations')
+def get_stations():
+        print("In get Stations")
+        markers = []
+        for station in stations:
+            latitude = station.get('position', {}).get('lat', 0.0)
+            longitude = station.get('position', {}).get('lng', 0.0)
+
+            marker = {
+                'number': station['number'],
+                'lng':longitude,
+                'lat':latitude,
+                'position': {'lat': latitude,'lng':longitude},
+                'title': station['name'],
+                'status': station['status'],
+                'bike_stands': station['bike_stands'],
+                'available_bikes': station['available_bikes'],
+                'available_bike_stands': station['available_bike_stands']
+            }
+
+            markers.append(marker)
+        # print(markers)
+        return {'stations': markers}
 
 
 if __name__ == '__main__':
