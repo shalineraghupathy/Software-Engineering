@@ -78,23 +78,23 @@ def get_stations():
     session.close()
     return jsonify({'stations': station_data})
 
-@app.route('/api/availabilities', methods=['GET'])
-def get_availabilities():
-    # 获取所有站点的动态可用性信息
-    session = db.session
-    availabilities = session.query(Availability).all()
-    availability_data = [
-        {
-            'number': availability.number,
-            'available_bikes': availability.available_bikes,
-            'available_bike_stands': availability.available_bike_stands,
-            'last_update': availability.last_update,
-            'status': availability.status
-        }
-        for availability in availabilities
-    ]
-    session.close()
-    return jsonify({'availabilities': availability_data})
+# @app.route('/api/availabilities', methods=['GET'])
+# def get_availabilities():
+#     # 获取所有站点的动态可用性信息
+#     session = db.session
+#     availabilities = session.query(Availability).all()
+#     availability_data = [
+#         {
+#             'number': availability.number,
+#             'available_bikes': availability.available_bikes,
+#             'available_bike_stands': availability.available_bike_stands,
+#             'last_update': availability.last_update,
+#             'status': availability.status
+#         }
+#         for availability in availabilities
+#     ]
+#     session.close()
+#     return jsonify({'availabilities': availability_data})
 
 @app.route('/api/weather', methods=['GET'])
 def get_weather():
@@ -111,8 +111,8 @@ def get_weather():
             'temperature': weather_data['main']['temp'],
             'humidity': weather_data['main']['humidity'],
             'weather_main': weather_data['weather'][0]['main'],
-            'weather_description': weather_data['weather'][0]['description'],
-            'weather_icon': weather_data['weather'][0]['icon'],
+            # 'weather_description': weather_data['weather'][0]['description'],
+            # 'weather_icon': weather_data['weather'][0]['icon'],
             # 可以继续添加需要的字段...
         })
     else:
@@ -121,7 +121,20 @@ def get_weather():
 
 @app.route('/api/free-bikes', methods=['GET'])
 def free_bikes():
-    stations_with_free_bikes = db.session.query(Station).join(Availability).filter(Availability.available_bikes > 0).all()
+    # 构建子查询以找到每个站点最新的可用性记录ID
+    subquery = db.session.query(
+        Availability.number,
+        db.func.max(Availability.id).label('latest_id')
+    ).group_by(Availability.number).subquery()
+
+    # 使用子查询结果，只查询与最新记录匹配的站点和可用性信息
+    stations_with_free_bikes = db.session.query(Station).join(
+        Availability, Station.number == Availability.number
+    ).join(
+        subquery, Availability.id == subquery.c.latest_id
+    ).filter(Availability.available_bikes > 0).all()
+
+    # 构造响应数据
     station_data = [
         {
             'number': station.number,
@@ -129,14 +142,30 @@ def free_bikes():
             'address': station.address,
             'position_lat': station.position_lat,
             'position_long': station.position_long,
-            'available_bikes': [availability.available_bikes for availability in station.availability]  # 假设每个站点可能有多条availability记录
-        } for station in stations_with_free_bikes
+            'available_bikes': station.availability[0].available_bikes  # 直接访问每个站点的可用自行车信息
+        }
+        for station in stations_with_free_bikes
     ]
+
     return jsonify({'stations': station_data})
+
 
 @app.route('/api/free-stands', methods=['GET'])
 def free_stands():
-    stations_with_free_stands = db.session.query(Station).join(Availability).filter(Availability.available_bike_stands > 0).all()
+    # 构建子查询以找到每个站点最新的可用性记录ID
+    subquery = db.session.query(
+        Availability.number,
+        db.func.max(Availability.id).label('latest_id')
+    ).group_by(Availability.number).subquery()
+
+    # 使用子查询结果，只查询与最新记录匹配的站点和可用性信息
+    stations_with_free_stands = db.session.query(Station).join(
+        Availability, Station.number == Availability.number
+    ).join(
+        subquery, Availability.id == subquery.c.latest_id
+    ).filter(Availability.available_bike_stands > 0).all()
+
+    # 构造响应数据
     station_data = [
         {
             'number': station.number,
@@ -144,10 +173,13 @@ def free_stands():
             'address': station.address,
             'position_lat': station.position_lat,
             'position_long': station.position_long,
-            'available_bike_stands': [availability.available_bike_stands for availability in station.availability]  # 假设每个站点可能有多条availability记录
-        } for station in stations_with_free_stands
+            'available_bike_stands': station.availability[0].available_bike_stands  # 直接访问每个站点的可用自行车车位信息
+        }
+        for station in stations_with_free_stands
     ]
+
     return jsonify({'stations': station_data})
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,228 +1,222 @@
-let map; // 全局地图实例
-let markers = []; // 保存所有标记的数组
-let isFilteredView;
-const customMarkerIconUrls = {
-    default: '../static/default-bike1.png', // 默认图标
-    freeBikes: '../static/free-bike.png', // 有空闲自行车的图标
-    freeStands: '../static/stands.png', // 有空闲停车位的图标
-    searched: '../static/search-result.png' // 搜索结果的图标
-};
+let map; // Global map instance
+let markers = []; // Array to hold all markers
+let currentView = 'default'; // 默认视图，表示没有选择任何特定的视图模式
 
+let staticInfo = {};
+let dynamicInfo = {};
+const customMarkerIconUrls = {
+    default: '../static/default-bike1.png',
+    freeBikes: '../static/free-bike.png',
+    freeStands: '../static/stands.png',
+    searched: '../static/search-result.png'
+};
+// Event listeners for dynamic information loading
+document.getElementById('free-bikes-btn').addEventListener('click', () => {
+    currentView = 'freeBikes';
+    fetchAndDisplayStations('freeBikes');
+});
+document.getElementById('free-stands-btn').addEventListener('click', () => {
+    currentView = 'freeStands';
+    fetchAndDisplayStations('freeStands');
+});
+document.getElementById('searchButton').addEventListener('click', () => {
+    currentView = 'searched';
+    const searchTerm = document.getElementById('searchInput').value;
+    if (searchTerm) fetchAndDisplayStations('searched', searchTerm);
+});
+
+
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const userPos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            // 在地图上显示用户位置
+            showUserPosition(userPos);
+        }, function() {
+            alert('获取用户位置失败。');
+        });
+    } else {
+        // 浏览器不支持 Geolocation
+        alert('浏览器不支持 Geolocation。');
+    }
+}
+function showUserPosition(position) {
+    const marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        title: "您的位置",
+        icon: {
+            url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' // 使用蓝色标记表示用户位置
+        }
+    });
+    map.setCenter(position); // 将地图中心移动到用户位置
+}
+
+// Initialize the map and load static station data
 function initMap() {
-    var dublin = { lat: 53.349805, lng: -6.26031 };
+    getUserLocation();
+    const dublin = { lat: 53.349805, lng: -6.26031 };
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 14,
-        center: dublin,
+        center: dublin
     });
-
-    // 初始化地图时加载所有站点
-    fetchStationsAndAddMarkers('');
+    fetchStaticStations();
+    fetchWeatherInfo(); // 获取天气信息
 }
-
-function fetchStationsAndAddMarkers(searchTerm) {
-    let url = '/api/search-stations?term=';
-    if (searchTerm) {
-        url += encodeURIComponent(searchTerm);
-    }
-    fetch(url)
+// 添加获取天气信息的函数
+function fetchWeatherInfo() {
+    fetch('/api/weather')
         .then(response => response.json())
         .then(data => {
-            displayStations(data.stations);
+            document.getElementById('weatherInfo').innerHTML = `
+                Temp: ${data.temperature}°C , ${data.weather_main}
+            `;
         })
-        .catch(error => console.error('Error fetching stations:', error));
+        .catch(error => console.error('Error fetching weather:', error));
+}
+// Fetch and display static station information
+// Fetch and display static station information
+function fetchStaticStations() {
+    fetch('/api/stations')
+        .then(response => response.json())
+        .then(data => {
+            // 存储静态站点信息
+            staticInfo = data.stations.reduce((acc, station) => {
+                acc[station.number] = station;
+                return acc;
+            }, {});
+            displayStations(data.stations, 'default');
+        })
+        .catch(error => console.error('Error fetching static stations:', error));
 }
 
-function displayStations(stations, status = 'default') {
-    clearMarkers(); // 清除现有的所有标记
+
+// Update markers on the map based on the provided stations and status
+// Update markers on the map based on the provided stations and status
+function displayStations(stations, status) {
+    clearMarkers();
     stations.forEach(station => {
-        let icon = {
-            url: customMarkerIconUrls.default, // 默认图标的URL
-            scaledSize: new google.maps.Size(60, 60) // 调整为希望的大小
-        };
-
-        if (status === 'default') {
-            if (station.available_bikes > 0) {
-                icon.url = customMarkerIconUrls.freeBikes;
-                // icon.scaledSize = new google.maps.Size(20, 20); // 如果需要，可以为特定状态调整大小
-            } else if (station.available_bike_stands > 0) {
-                icon.url = customMarkerIconUrls.freeStands;
-                // icon.scaledSize = new google.maps.Size(20, 20);
-            }
-        } else if (status === 'freeBikes') {
-            icon.url = customMarkerIconUrls.freeBikes;
-        } else if (status === 'freeStands') {
-            icon.url = customMarkerIconUrls.freeStands;
-        } else if (status === 'searched') {
-            icon.url = customMarkerIconUrls.searched;
-        }
-
+        const iconUrl = determineIconUrl(station, status);
         const marker = new google.maps.Marker({
-            position: {lat: station.position_lat, lng: station.position_long},
+            position: { lat: station.position_lat, lng: station.position_long },
             map: map,
             title: station.name,
-            icon: icon // 使用修正后的icon对象
+            icon: { url: iconUrl, scaledSize: new google.maps.Size(50, 50) },
+            stationNumber: station.number // 保存站点编号到标记中
         });
 
-        // 为每个标记添加点击事件，以显示站点详细信息
-        marker.addListener('click', () => {
-            showStationInfo(station);
-        });
-
-        markers.push(marker); // 将标记添加到数组中
+        // 为每个标记添加点击事件监听器，显示站点详细信息
+        marker.addListener('click', () => showStationInfo(station.number)); // 修改这里，传递站点编号
+        markers.push(marker);
     });
-
-    isFilteredView = false; // 重置过滤视图状态
 }
 
 
+
+// 更新标记以反映动态信息
+function updateStationMarkers(availabilities) {
+    // 遍历可用性信息
+    availabilities.forEach(availability => {
+        // 查找对应站点编号的标记
+        const markerToUpdate = markers.find(marker => marker.stationNumber === availability.number);
+        if (markerToUpdate) {
+            // 更新标记的图标或其他属性以反映可用性信息
+            // 这里以图标为例，你可能需要根据可用自行车数量来选择图标
+            const newIconUrl = availability.available_bikes > 0 ? customMarkerIconUrls.freeBikes : customMarkerIconUrls.default;
+            markerToUpdate.setIcon({ url: newIconUrl, scaledSize: new google.maps.Size(50, 50) });
+        }
+    });
+}
+
+
+// Clear all markers from the map
 function clearMarkers() {
     markers.forEach(marker => marker.setMap(null));
     markers = [];
 }
 
-function showStationInfo(station) {
-    var stationInfoDiv = document.getElementById('stationInfo');
+// Show station information
+// Show station information
+function showStationInfo(stationNumber) {
+    const stationStaticInfo = staticInfo[stationNumber];
+    const stationDynamicInfo = dynamicInfo[stationNumber] || {};
+
+    const stationInfoDiv = document.getElementById('stationInfo');
     stationInfoDiv.innerHTML = `
-        <h4>${station.name}</h4>
-        <p>Address: ${station.address}</p>
-        <p>Bike Stands: ${station.bike_stands}</p>
-        <p>Available Bikes: ${station.available_bikes || '...'}</p>`;
+        <h4>${stationStaticInfo.name}</h4>
+        <p>Address: ${stationStaticInfo.address}</p>
+        <p>Bike Stands: ${stationStaticInfo.bike_stands}</p>
+        ${currentView !== 'default' ? `
+        <p>Available Bikes: ${stationDynamicInfo.available_bikes || 'N/A'}</p>
+        <p>Available Bike Stands: ${stationDynamicInfo.available_bike_stands || 'N/A'}</p>
+        <p>Last Update: ${stationDynamicInfo.last_update ? new Date(stationDynamicInfo.last_update).toLocaleString() : 'N/A'}</p>
+        ` : ''}
+    `;
     stationInfoDiv.classList.remove('hidden');
 }
 
-document.getElementById('free-bikes-btn').addEventListener('click', function() {
-    // 假设 `fetchAndDisplayStations` 是一个新函数，用于获取并显示指定状态的站点
-    fetchAndDisplayStations('freeBikes'); // 显示有空闲自行车的站点并更新图标
 
 
-    fetch('/api/free-bikes')
-    .then(response => response.json())
-    .then(data => {
-      updateMarkerIcons(markers, data); // 更新标记图标
-      displayStations(data.stations);
-    })
-    .catch(error => console.error('Error fetching free bikes:', error));
-});
-
-document.getElementById('free-stands-btn').addEventListener('click', function() {
-    fetchAndDisplayStations('freeStands'); // 显示有空闲停车位的站点并更新图标
 
 
-    fetch('/api/free-stations')
-    .then(response => response.json())
-    .then(data => {
-      updateMarkerIcons(markers, data); // 更新标记图标
-      displayStations(data.stations);
-    })
-    .catch(error => console.error('Error fetching free stands:', error));
-});
-
-document.getElementById('searchButton').addEventListener('click', function() {
-    var searchTerm = document.getElementById('searchInput').value;
-    fetchAndDisplayStations('searched', searchTerm); // 显示搜索结果并更新图标
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    initMap();
-    updateWeatherInfo();
-    fetchStaticStations(); // 仅在页面加载时加载静态站点信息
-});
-
-
-// 添加点击事件监听器以隐藏navbar
-var toggleBtn = document.getElementById('toggleNav');
-var navbar = document.querySelector('.navbar');
-var mapContainer = document.getElementById('mapContainer');
-
-toggleBtn.addEventListener('click', function() {
-    navbar.classList.toggle('hidden');
-    mapContainer.classList.toggle('fullwidth');
-});
-
-function updateWeatherInfo() {
-    fetch('/api/weather')
-        .then(response => response.json())
-        .then(data => {
-            const weatherDiv = document.getElementById('weatherInfo');
-            const iconUrl = `http://openweathermap.org/img/wn/${data.weather_icon}.png`;
-            weatherDiv.innerHTML = `<img src="${iconUrl}" alt="Weather Icon" /> <span>${data.weather_description}, ${data.temperature}°C</span>`;
-        })
-        .catch(error => {
-            console.error('Error fetching weather:', error);
-            document.getElementById('weatherInfo').innerHTML = 'Failed to load weather data';
-        });
-}
-
-
-// 加载静态站点信息
-function fetchStaticStations() {
-    fetch('/api/stations')
-        .then(response => response.json())
-        .then(data => {
-            displayStations(data.stations);
-        })
-        .catch(error => console.error('Error fetching static stations:', error));
-}
-
-// 加载动态站点可用性信息
-function fetchAvailabilities() {
-    fetch('/api/availabilities')
-        .then(response => response.json())
-        .then(data => {
-            updateStationMarkers(data.availabilities);
-        })
-        .catch(error => console.error('Error fetching availabilities:', error));
-}
-
-// 更新地图上的站点标记以显示动态可用性信息
-function updateStationMarkers(availabilities) {
-    // 清除现有的所有标记
-    clearMarkers();
-    // 遍历可用性数据，为每个站点添加新的标记
-    availabilities.forEach(availability => {
-        const station = markers.find(marker => marker.station.number === availability.number);
-        if (station) {
-            // 更新标记的描述信息
-            station.description = `Available Bikes: ${availability.available_bikes}, Available Stands: ${availability.available_bike_stands}`;
-            // 可以在这里添加更多逻辑来更新标记的外观，例如改变颜色或图标
-        }
-    });
-}
-
-// 在页面加载时加载静态站点信息
-document.addEventListener('DOMContentLoaded', function() {
-    initMap();
-    fetchStaticStations(); // 加载静态站点
-    // 你可以在这里调用fetchAvailabilities()来加载动态信息，或者提供一个按钮让用户选择何时加载
-});
-
-// 添加一个按钮让用户选择加载动态信息
-document.getElementById('loadAvailabilities').addEventListener('click', function() {
-    fetchAvailabilities();
-});
-
-function fetchAndDisplayStations(status, searchTerm = '') {
-    let url = '/api/search-stations?term='; // 使用搜索站点的API
-    if (status === 'freeBikes') {
-        url += 'free-bikes'; // 假设后端能识别这个查询并返回有空闲自行车的站点
-    } else if (status === 'freeStands') {
-        url += 'free-stands'; // 假设后端能识别这个查询并返回有空闲停车位的站点
-    } else if (status === 'searched') {
-        url += encodeURIComponent(searchTerm); // 对搜索词进行编码
+// Determine icon URL based on station status
+// Determine icon URL based on station status and availability
+function determineIconUrl(station, status) {
+    switch (status) {
+        case 'freeBikes':
+            return station.available_bikes > 0 ? customMarkerIconUrls.freeBikes : customMarkerIconUrls.default;
+        case 'freeStands':
+            return station.available_bike_stands > 0 ? customMarkerIconUrls.freeStands : customMarkerIconUrls.default;
+        case 'searched':
+            return customMarkerIconUrls.searched;
+        default:
+            return customMarkerIconUrls.default;
     }
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            displayStations(data.stations, status); // 显示站点并指定状态
-        })
-        .catch(error => console.error('Error fetching stations:', error));
 }
 
 
 
 
 
+// Fetch and display stations based on search or filter criteria
+function fetchAndDisplayStations(status, searchTerm = '') {
+    let url;
+    // 根据状态确定请求的URL
+    switch(status) {
+        case 'free-bikes':
+        case 'free-stands':
+            url = `/api/${status}`; // 适用于动态数据的端点
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // 存储动态信息以供后续使用
+                    dynamicInfo = data.stations.reduce((acc, station) => {
+                        acc[station.number] = station;
+                        return acc;
+                    }, {});
+                    // 更新标记以反映动态信息
+                    updateStationMarkers(dynamicInfo);
+                })
+                .catch(error => console.error(`Error fetching ${status}:`, error));
+            break;
+            case 'searched':
+                url = `/api/search-stations?term=${encodeURIComponent(searchTerm)}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // 清除当前所有标记
+                    clearMarkers();
+                    // 显示搜索结果的站点
+                    displayStations(data.stations, 'searched');
+                })
+                .catch(error => console.error(`Error fetching searched stations:`, error));
+            break;
+            default:
+                url = '/api/stations'; // 适用于默认的端点
+    }
+}
 
-
-
+document.addEventListener('DOMContentLoaded', initMap);
