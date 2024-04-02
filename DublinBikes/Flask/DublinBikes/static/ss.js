@@ -4,7 +4,6 @@ var markers = [];
 var stationsData = [];
 var selectedLocationMarker;
 var infoWindow;
-var userLoc = {};
 
 async function fetchStationData() {
   try {
@@ -236,9 +235,6 @@ async function initMap() {
 
   const { Map } = await google.maps.importLibrary("maps");
   map = new Map(document.getElementById("map"), mapOptions);
-  directionsService = new google.maps.DirectionsService();
-  directionsRenderer = new google.maps.DirectionsRenderer();
-  directionsRenderer.setMap(map);
   infoWindow = new google.maps.InfoWindow();
 
   await fetchStationData();
@@ -250,11 +246,11 @@ function handleUserLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        userLoc = {
+        const pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        map.setCenter(userLoc);
+        map.setCenter(pos);
         loadStationCoordinates(stationsData);
       },
       () => {
@@ -293,7 +289,7 @@ function initAutocomplete() {
       },
     });
 
-    stationsData.forEach((station) => {
+    stationsdata.forEach((station) => {
       const stationLocation = new google.maps.LatLng(station.lat, station.lng);
       const distance = google.maps.geometry.spherical.computeDistanceBetween(
         selectedLocation,
@@ -303,19 +299,31 @@ function initAutocomplete() {
     });
 
     // Sort stations by distance
-    const sortedStations = stationsData.sort((a, b) => a.distance - b.distance);
+    const sortedStations = stationsdata.sort((a, b) => a.distance - b.distance);
 
     // Select top 5 nearest stations
     const top5Stations = sortedStations.slice(0, 5);
 
     loadStationCoordinates(top5Stations);
-    updateSlidePanel(top5Stations, "searchResults");
+
+    var stationList = document.getElementById("stationList");
+    stationList.innerHTML = ""; // Clear current list
+
+    top5Stations.forEach((station) => {
+      var elem = document.createElement("div");
+      elem.classList.add("card");
+      elem.innerHTML = `<h4>${station.title}</h4>
+                          <p>Bikes available: ${station.available_bikes}</p>
+                          <p>Stands available: ${station.available_bike_stands}</p>
+                          <p>Distance: ${station.distance} m</p>`;
+      stationList.appendChild(elem);
+    });
+
     openPanel();
   });
 }
 
 function loadStationCoordinates(data) {
-  console.log(data);
   clearMarkers();
   data.forEach((station) => {
     const marker = createMarkerForStation(station);
@@ -336,80 +344,12 @@ function createMarkerForStation(station) {
     },
   });
 }
-function updateSlidePanel(data, type) {
-  var stationList = document.getElementById("stationList");
-  stationList.innerHTML = ""; // Clear current content
-
-  if (type === "stationDetails") {
-    // Assuming data contains station information including lat, lng
-    var directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${data.lat},${data.lng}&travelmode=bicycling`;
-    var elem = document.createElement("div");
-    elem.classList.add("card");
-    elem.innerHTML = `<h4>${data.title}</h4>
-                      <p>Bikes available: ${data.available_bikes}</p>
-                      <p>Stands available: ${data.available_bike_stands}</p>
-                      <p>Status: ${data.status}</p>
-                      <button onclick="getDirections(${data.lat}, ${data.lng})">Get Directions</button>`;
-    // <a href="${directionsUrl}" target="_blank">Get Directions</a>`; // Link to Google Maps directions
-    stationList.appendChild(elem);
-  } else if (type === "searchResults") {
-    // Displaying search results or nearest stations
-    data.forEach((station) => {
-      var elem = document.createElement("div");
-      elem.classList.add("card");
-      elem.innerHTML = `<h4>${station.title}</h4>
-                        <p>Bikes available: ${station.available_bikes}</p>
-                        <p>Stands available: ${station.available_bike_stands}</p>
-                        <p>Distance: ${station.distance} m</p>`; // Adjust content as needed
-      stationList.appendChild(elem);
-    });
-  }
-}
 
 function setupMarkerInfoWindow(marker, station) {
   marker.addListener("mouseover", () => {
-    const content = `<div class="container">
-                          <h4>${station.number} ${station.title}</h4>
-                          <div class="icons">
-                              <span class="icon"> <img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="20px" height="20px"> ${station.available_bikes}</span>
-                              <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Bikes" width="20px" height="20px"> ${station.available_bike_stands}</span>
-                          </div>
-                      </div>`;
     infoWindow.setContent(content);
     infoWindow.open(map, marker);
   });
-  marker.addListener("click", () => {
-    updateSlidePanel(station, "stationDetails");
-    openPanel();
-  });
-}
-function getDirections(destLat, destLng) {
-  var start = new google.maps.LatLng(userLoc.lat, userLoc.lng);
-  var end = new google.maps.LatLng(destLat, destLng);
-  var request = {
-    origin: start,
-    destination: end,
-    travelMode: "DRIVING", // Change as required
-  };
-  if (directionsRenderer) {
-    directionsRenderer.setDirections({ routes: [] });
-  }
-  directionsService.route(request, function (result, status) {
-    if (status === "OK") {
-      directionsRenderer.setDirections(result);
-    }
-  });
-}
-function updatePanelContent(station) {
-  var stationList = document.getElementById("stationList");
-  stationList.innerHTML = ""; // Clear current content
-  var elem = document.createElement("div");
-  elem.classList.add("card");
-  elem.innerHTML = `<h4>${station.title}</h4>
-                    <p>Bikes available: ${station.available_bikes}</p>
-                    <p>Stands available: ${station.available_bike_stands}</p>
-                    <p>Status: ${station.status}</p>`; // Add more details as needed
-  stationList.appendChild(elem);
 }
 
 function clearMarkers() {
@@ -433,7 +373,7 @@ function closePanel() {
   document.getElementById("stationDetailsPanel").classList.remove("open");
   document.querySelector(".content").classList.remove("split");
   document.querySelector(".content").classList.add("fullwidth");
-  loadStationCoordinates(stationsData);
+  loadStationCoordinates(stationsdata);
   document.getElementById("autocomplete").value = "";
   if (selectedLocationMarker) {
     selectedLocationMarker.setMap(null);

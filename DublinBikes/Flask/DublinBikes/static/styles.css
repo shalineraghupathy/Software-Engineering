@@ -9,14 +9,25 @@ ul {
   height: 100%;
 }
 
+/* Ensure html and body are full height for flexbox layout */
+html,
+body {
+  height: 100%;
+}
+
 /* Navbar styles */
 .navbar {
   background-color: #333;
   padding: 10px;
+  position: fixed; /* Make navbar always visible */
+  width: 100%; /* Ensure navbar stretches across the full width */
+  top: 0; /* Fix to the top */
+  z-index: 10; /* Ensure it's above other content */
 }
 
 .navbar ul {
   list-style-type: none;
+  padding-left: 0; /* Remove default padding */
 }
 
 .navbar li {
@@ -30,109 +41,60 @@ ul {
   font-weight: bold;
 }
 
+/* Improved focus style for better accessibility */
+.navbar a:focus,
+.search-input:focus,
+.search-button:focus {
+  outline: none; /* Visible and contrasting outline */
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
+  height: 100%; /* Ensure wrapper fills the screen vertically */
 }
+
 /* Content styles */
 .content {
   text-align: center;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  /* float: right; */
-  transition: width 0.5s ease;
-}
-.content.fullwidth {
-  width: 100%;
-  transition: width 0.5s ease;
-}
-
-.content.split {
-  width: 80%;
-  transition: width 0.5s ease;
+  flex: 1; /* Allow content to grow and fill available space */
+  position: relative; /* Adjusted for better control */
 }
 
 #map {
   width: 100%;
-  height: 100%;
-  align-items: center;
-  margin: 0 auto;
+  height: 100%; /* Adjust height to fill content area */
 }
-/* Style for search container */
 
+/* Style for search container */
 .search-container {
   position: absolute;
-  top: 90px;
+  top: 70px; /* Adjusted for fixed navbar */
   left: 45px;
-  z-index: 2;
+  z-index: 5;
   border-radius: 25px;
   background-color: #fff;
-  overflow: hidden;
   padding: 0 15px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
-/* Style for search input */
 .search-input {
-  width: 70%;
-  font-size: 1rem;
-  margin: 5px;
-  font-weight: 400;
-  line-height: 1.5;
   border: none;
-  outline: none;
+  padding: 5px;
 }
-
-/* Style for search button */
 
 .search-button {
-  padding: 0;
-  margin: 5px;
+  /* padding: 0; */
+  /* margin: 5px; */
   border: none;
-  background-color: #fff;
+  background-color: transparent;
   cursor: pointer;
-}
-
-.search-button img {
-  width: 20px;
-  height: 20px;
-}
-.container {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.container h1 {
-  margin: 0;
-  font-size: 2em;
-}
-
-.number {
-  font-size: 1.2em;
-  margin: 0;
-}
-
-.main-number {
-  font-size: 2em;
-  margin: 20px 0; /* Some spacing */
-}
-
-.icons {
-  display: flex;
-}
-
-.icon {
-  margin-left: 10px;
 }
 
 .station-details-panel {
   position: fixed;
   left: 0;
-  width: 20%; /* Panel takes up 30% of the width */
+  width: 25%; /* Panel takes up 30% of the width */
   height: 100%;
   background-color: #fff;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
@@ -143,9 +105,8 @@ ul {
 }
 
 .station-details-panel.open {
-  transform: translateX(0%); /* Slide in */
+  transform: translateX(0);
 }
-
 .card {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
@@ -161,7 +122,8 @@ ul {
 }
 
 #stationList {
-  margin-top: 50px;
+  margin-top: 20px;
+  overflow-y: scroll;
 }
 
 /* Footer styles */
@@ -173,4 +135,20 @@ ul {
   position: fixed;
   bottom: 0;
   width: 100%;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .navbar li {
+    display: block; /* Stack nav items vertically on small screens */
+    margin: 10px 0; /* Add some vertical spacing */
+  }
+
+  .search-container {
+    top: 70px; /* Adjust search bar position below stacked navbar */
+  }
+
+  .station-details-panel {
+    width: 100%; /* Panel takes full width on smaller screens */
+  }
 }
