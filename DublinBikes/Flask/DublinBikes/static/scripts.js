@@ -356,52 +356,15 @@ function loadStationCoordinates(data) {
 //   });
 // }
 
-// Make the function asynchronous
-// function createMarkerForStation(station) {
-//   // Direct SVG content as a string (for demonstration)
-//   let svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 38">
-//       <defs>
-//           <style>
-//               .cls-1{fill:#000000;} /* Outer marker color */
-//               .cls-2{fill:#c2c2c2;} /* Main circle color */
-//               .cls-3{fill:#c2c2c2;} /* Inner circle color */
-//               .cls-4{font-size:4px; font-family:Arial, sans-serif; fill:#ffffff;} /* Text styling */
-//           </style>
-//       </defs>
-//       <g id="offre-abo-on">
-//           <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
-//           <path d="M15,2A12.94,12.94,0,0,1,27.93,14.93c0,9.12-9.54,17.75-12.93,20.53C11.61,32.69,2.07,24.08,2.07,14.93A12.94,12.94,0,0,1,15,2m0-2A14.93,14.93,0,0,0,.07,14.93C.07,27.14,15,38,15,38S29.93,27.14,29.93,14.93A14.93,14.93,0,0,0,15,0Z"/>
-//           <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
-//           <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
-//           <text class="cls-4" x="10" y="20">${station.available_bikes}</text>
-//       </g>
-//   </svg>`;
-
-//   // Create a blob from the SVG text
-//   const blob = new Blob([svgText], { type: "image/svg+xml" });
-//   const url = URL.createObjectURL(blob);
-
-//   // Create and return the marker with the dynamically generated SVG icon
-//   return new google.maps.Marker({
-//     position: { lat: station.lat, lng: station.lng },
-//     map: map,
-//     title: station.name,
-//     icon: {
-//       url: url,
-//       scaledSize: new google.maps.Size(40, 40),
-//     },
-//   });
-// }
-
 function createMarkerForStation(station) {
   // Updated SVG content with styled text to fit the inner circle
   let svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 38">
       <defs>
           <style>
-              .cls-1{fill:#000000;} /* Outer marker color */
+              .cls-1{fill:#333;} /* Outer marker color */
               .cls-2{fill:#ffffff;} /* Main circle color */
               .cls-3{fill:#ffffff;} /* Inner circle color */
-              .cls-4{font-size:16px; font-family:Arial, sans-serif; fill:#000000; font-weight:bold;} /* Updated text styling for visibility */
+              .cls-4{font-size:16px; font-family:Arial, sans-serif; fill:#333; font-weight:300;} /* Updated text styling for visibility */
           </style>
       </defs>
       <g id="Layer_2" data-name="Layer 2">
@@ -409,7 +372,7 @@ function createMarkerForStation(station) {
               <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
               <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
               <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
-              <text class="cls-4" x="50%" y="40%" dominant-baseline="middle" text-anchor="middle">${station.available_bikes}</text>
+              <text class="cls-4" x="50%" y="42%" dominant-baseline="middle" text-anchor="middle">${station.available_bikes}</text>
           </g>
       </g>
   </svg>`;
@@ -424,7 +387,7 @@ function createMarkerForStation(station) {
     title: station.name,
     icon: {
       url: url,
-      scaledSize: new google.maps.Size(40, 40),
+      scaledSize: new google.maps.Size(45, 45),
     },
   });
 }
