@@ -5,6 +5,7 @@ var stationsData = [];
 var selectedLocationMarker;
 var infoWindow;
 var userLoc = {};
+var currentPolyline;
 
 async function fetchStationData() {
   try {
@@ -336,21 +337,98 @@ function loadStationCoordinates(data) {
   adjustMapViewToFitMarkers();
 }
 
+// function createMarkerForStation(station) {
+//   const svgUrl = "./static/marker.svg"; // Static SVG path
+//   let svgText = fetch(svgUrl).then((response) => response.text());
+//   // let svgText = "./static/marker.svg";
+//   svgText = svgText.replace("PLACEHOLDER", `${station.available_bikes} bikes`);
+
+//   const blob = new Blob([svgText], { type: "image/svg+xml" });
+//   const url = URL.createObjectURL(blob);
+//   return new google.maps.Marker({
+//     position: { lat: station.lat, lng: station.lng },
+//     map: map,
+//     title: station.name,
+//     icon: {
+//       url: url,
+//       scaledSize: new google.maps.Size(40, 40),
+//     },
+//   });
+// }
+
+// Make the function asynchronous
+// function createMarkerForStation(station) {
+//   // Direct SVG content as a string (for demonstration)
+//   let svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 38">
+//       <defs>
+//           <style>
+//               .cls-1{fill:#000000;} /* Outer marker color */
+//               .cls-2{fill:#c2c2c2;} /* Main circle color */
+//               .cls-3{fill:#c2c2c2;} /* Inner circle color */
+//               .cls-4{font-size:4px; font-family:Arial, sans-serif; fill:#ffffff;} /* Text styling */
+//           </style>
+//       </defs>
+//       <g id="offre-abo-on">
+//           <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
+//           <path d="M15,2A12.94,12.94,0,0,1,27.93,14.93c0,9.12-9.54,17.75-12.93,20.53C11.61,32.69,2.07,24.08,2.07,14.93A12.94,12.94,0,0,1,15,2m0-2A14.93,14.93,0,0,0,.07,14.93C.07,27.14,15,38,15,38S29.93,27.14,29.93,14.93A14.93,14.93,0,0,0,15,0Z"/>
+//           <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
+//           <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
+//           <text class="cls-4" x="10" y="20">${station.available_bikes}</text>
+//       </g>
+//   </svg>`;
+
+//   // Create a blob from the SVG text
+//   const blob = new Blob([svgText], { type: "image/svg+xml" });
+//   const url = URL.createObjectURL(blob);
+
+//   // Create and return the marker with the dynamically generated SVG icon
+//   return new google.maps.Marker({
+//     position: { lat: station.lat, lng: station.lng },
+//     map: map,
+//     title: station.name,
+//     icon: {
+//       url: url,
+//       scaledSize: new google.maps.Size(40, 40),
+//     },
+//   });
+// }
+
 function createMarkerForStation(station) {
+  // Updated SVG content with styled text to fit the inner circle
+  let svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 38">
+      <defs>
+          <style>
+              .cls-1{fill:#000000;} /* Outer marker color */
+              .cls-2{fill:#ffffff;} /* Main circle color */
+              .cls-3{fill:#ffffff;} /* Inner circle color */
+              .cls-4{font-size:16px; font-family:Arial, sans-serif; fill:#000000; font-weight:bold;} /* Updated text styling for visibility */
+          </style>
+      </defs>
+      <g id="Layer_2" data-name="Layer 2">
+          <g id="Layer_1-2" data-name="Layer 1">
+              <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
+              <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
+              <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
+              <text class="cls-4" x="50%" y="40%" dominant-baseline="middle" text-anchor="middle">${station.available_bikes}</text>
+          </g>
+      </g>
+  </svg>`;
+
+  const blob = new Blob([svgText], { type: "image/svg+xml" });
+  const url = URL.createObjectURL(blob);
+
+  // Create and return the marker with the dynamically generated SVG icon
   return new google.maps.Marker({
     position: { lat: station.lat, lng: station.lng },
     map: map,
     title: station.name,
     icon: {
-      url: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
-      // url: "https://cdn-icons-png.flaticon.com/512/6984/6984914.png",
-      // https://cdn-icons-png.flaticon.com/512/15521/15521929.png
-      // https://cdn-icons-png.flaticon.com/512/447/447031.png
-      // http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+      url: url,
       scaledSize: new google.maps.Size(40, 40),
     },
   });
 }
+
 function updateSlidePanel(data, type) {
   var stationList = document.getElementById("stationList");
   stationList.innerHTML = ""; // Clear current content
@@ -394,6 +472,9 @@ function setupMarkerInfoWindow(marker, station) {
     infoWindow.open(map, marker);
   });
   marker.addListener("click", () => {
+    if (directionsRenderer) {
+      directionsRenderer.setDirections({ routes: [] });
+    }
     updateSlidePanel(station, "stationDetails");
     openPanel();
   });
@@ -415,17 +496,51 @@ function getDirections(destLat, destLng) {
     }
   });
 }
-function updatePanelContent(station) {
-  var stationList = document.getElementById("stationList");
-  stationList.innerHTML = ""; // Clear current content
-  var elem = document.createElement("div");
-  elem.classList.add("card");
-  elem.innerHTML = `<h4>${station.title}</h4>
-                    <p>Bikes available: ${station.available_bikes}</p>
-                    <p>Stands available: ${station.available_bike_stands}</p>
-                    <p>Status: ${station.status}</p>`; // Add more details as needed
-  stationList.appendChild(elem);
-}
+
+// function getDirections(destLat, destLng) {
+//   var start = new google.maps.LatLng(userLoc.lat, userLoc.lng);
+//   var end = new google.maps.LatLng(destLat, destLng);
+//   var request = {
+//     origin: start,
+//     destination: end,
+//     travelMode: "DRIVING", // Change as required
+//   };
+
+//   directionsService.route(request, function (result, status) {
+//     if (status === "OK") {
+//       // Clear previous route
+//       if (currentPolyline) {
+//         currentPolyline.setMap(null);
+//       }
+
+//       // Create a new polyline for the route
+//       var routePath = new google.maps.Polyline({
+//         path: result.routes[0].overview_path,
+//         geodesic: true,
+//         strokeColor: "#000000", // Here you can set the color to black
+//         strokeOpacity: 1.0,
+//         strokeWeight: 2,
+//       });
+
+//       routePath.setMap(map);
+//       currentPolyline = routePath; // Store it if you need to clear it later
+//     } else {
+//       window.alert("Directions request failed due to " + status);
+//     }
+//   });
+// }
+
+// function updatePanelContent(station) {
+//   var stationList = document.getElementById("stationList");
+//   stationList.innerHTML = ""; // Clear current content
+//   var elem = document.createElement("div");
+//   elem.classList.add("card");
+//   elem.innerHTML = `<h4>${station.title}</h4>
+//                     <p>Bikes available: ${station.available_bikes}</p>
+//                     <p>Stands available: ${station.available_bike_stands}</p>
+//                     <p>Status: ${station.status}</p>`; // Add more details as needed
+//   stationList.appendChild(elem);
+// }
 
 function clearMarkers() {
   markers.forEach((marker) => marker.setMap(null));
@@ -445,6 +560,12 @@ function openPanel() {
   document.querySelector(".content").classList.add("split");
 }
 function closePanel() {
+  if (directionsRenderer) {
+    directionsRenderer.setDirections({ routes: [] });
+  }
+  // if (currentPolyline) {
+  //   currentPolyline.setMap(null);
+  // }
   document.getElementById("stationDetailsPanel").classList.remove("open");
   document.querySelector(".content").classList.remove("split");
   document.querySelector(".content").classList.add("fullwidth");
