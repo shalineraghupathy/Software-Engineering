@@ -254,6 +254,17 @@ function handleUserLocation() {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
+        var marker = new google.maps.Marker({
+          position: userLoc,
+          map: map,
+          title: "Your Location",
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/128/6735/6735939.png", // Example custom icon
+            scaledSize: new google.maps.Size(40, 40), // Size in pixels
+          },
+          //   https://cdn-icons-png.flaticon.com/128/6735/6735939.png
+        });
+
         map.setCenter(userLoc);
         loadStationCoordinates(stationsData);
       },
@@ -331,7 +342,11 @@ function createMarkerForStation(station) {
     map: map,
     title: station.name,
     icon: {
-      url: "https://cdn-icons-png.flaticon.com/512/6984/6984914.png",
+      url: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
+      // url: "https://cdn-icons-png.flaticon.com/512/6984/6984914.png",
+      // https://cdn-icons-png.flaticon.com/512/15521/15521929.png
+      // https://cdn-icons-png.flaticon.com/512/447/447031.png
+      // http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
       scaledSize: new google.maps.Size(40, 40),
     },
   });
