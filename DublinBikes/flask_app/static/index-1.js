@@ -5,7 +5,7 @@ let currentView = 'default'; // 默认视图，表示没有选择任何特定的
 let staticInfo = {};
 let dynamicInfo = {};
 const customMarkerIconUrls = {
-    default: '../static/default-bike1.png',
+    default: '../static/default-bike.png',
     freeBikes: '../static/free-bike.png',
     freeStands: '../static/stands.png',
     searched: '../static/search-result.png'
@@ -13,12 +13,13 @@ const customMarkerIconUrls = {
 // Event listeners for dynamic information loading
 document.getElementById('free-bikes-btn').addEventListener('click', () => {
     currentView = 'freeBikes';
-    fetchAndDisplayStations('freeBikes');
+    fetchAndDisplayStations('free-bikes'); // 正确的API路径
 });
 document.getElementById('free-stands-btn').addEventListener('click', () => {
     currentView = 'freeStands';
-    fetchAndDisplayStations('freeStands');
+    fetchAndDisplayStations('free-stands'); // 正确的API路径
 });
+
 document.getElementById('searchButton').addEventListener('click', () => {
     currentView = 'searched';
     const searchTerm = document.getElementById('searchInput').value;
@@ -152,7 +153,7 @@ function showStationInfo(stationNumber) {
         ${currentView !== 'default' ? `
         <p>Available Bikes: ${stationDynamicInfo.available_bikes || 'N/A'}</p>
         <p>Available Bike Stands: ${stationDynamicInfo.available_bike_stands || 'N/A'}</p>
-        <p>Last Update: ${stationDynamicInfo.last_update ? new Date(stationDynamicInfo.last_update).toLocaleString() : 'N/A'}</p>
+<!--        <p>Last Update: ${stationDynamicInfo.last_update ? new Date(stationDynamicInfo.last_update).toLocaleString() : 'N/A'}</p>-->
         ` : ''}
     `;
     stationInfoDiv.classList.remove('hidden');
