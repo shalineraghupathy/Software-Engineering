@@ -337,25 +337,6 @@ function loadStationCoordinates(data) {
   adjustMapViewToFitMarkers();
 }
 
-// function createMarkerForStation(station) {
-//   const svgUrl = "./static/marker.svg"; // Static SVG path
-//   let svgText = fetch(svgUrl).then((response) => response.text());
-//   // let svgText = "./static/marker.svg";
-//   svgText = svgText.replace("PLACEHOLDER", `${station.available_bikes} bikes`);
-
-//   const blob = new Blob([svgText], { type: "image/svg+xml" });
-//   const url = URL.createObjectURL(blob);
-//   return new google.maps.Marker({
-//     position: { lat: station.lat, lng: station.lng },
-//     map: map,
-//     title: station.name,
-//     icon: {
-//       url: url,
-//       scaledSize: new google.maps.Size(40, 40),
-//     },
-//   });
-// }
-
 function createMarkerForStation(station) {
   // Updated SVG content with styled text to fit the inner circle
   let svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 38">

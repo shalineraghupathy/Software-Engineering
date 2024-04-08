@@ -1,22 +1,20 @@
 var map;
 var centerMap;
 var markers = [];
-var stationsData = [];
+var stationsdata = [];
 var selectedLocationMarker;
-var infoWindow;
-
-async function fetchStationData() {
-  try {
-    const response = await fetch("/stations");
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    stationsData = data.stations || [];
-  } catch (error) {
-    console.error("Could not fetch station data: ", error);
-    alert("Failed to load station data. Please try again later."); // Provide feedback
-  }
+function fetchStationData() {
+  return fetch("/stations")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Could not fetch station data: ", error);
+      return []; // Ensure this catches and handles fetch errors
+    });
 }
 
 async function initMap() {
@@ -232,32 +230,44 @@ async function initMap() {
       },
     ],
   };
-
+  // Initialise map
   const { Map } = await google.maps.importLibrary("maps");
   map = new Map(document.getElementById("map"), mapOptions);
-  infoWindow = new google.maps.InfoWindow();
-
-  await fetchStationData();
+  fetchStationData()
+    .then((data) => {
+      stationsdata = data.stations;
+    })
+    .catch((error) => {
+      console.error("Error loading station data:", error);
+    });
   initAutocomplete();
-  handleUserLocation();
-}
-
-function handleUserLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const pos = {
+      function (position) {
+        var pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
+
+        var marker = new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: "Your Location",
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/128/6735/6735939.png", // Example custom icon
+            scaledSize: new google.maps.Size(40, 40), // Size in pixels
+          },
+          //   https://cdn-icons-png.flaticon.com/128/6735/6735939.png
+        });
         map.setCenter(pos);
-        loadStationCoordinates(stationsData);
+        loadStationCoordinates(stationsdata);
       },
-      () => {
+      function () {
         handleLocationError(true, map.getCenter());
       }
     );
   } else {
+    // Browser doesn't support Geolocation
     handleLocationError(false, map.getCenter());
   }
 }
@@ -319,56 +329,16 @@ function initAutocomplete() {
       stationList.appendChild(elem);
     });
 
+    // Open the panel
     openPanel();
   });
 }
-
-function loadStationCoordinates(data) {
-  clearMarkers();
-  data.forEach((station) => {
-    const marker = createMarkerForStation(station);
-    setupMarkerInfoWindow(marker, station);
-    markers.push(marker);
-  });
-  adjustMapViewToFitMarkers();
-}
-
-function createMarkerForStation(station) {
-  return new google.maps.Marker({
-    position: { lat: station.lat, lng: station.lng },
-    map: map,
-    title: station.name,
-    icon: {
-      url: "https://cdn-icons-png.flaticon.com/512/6984/6984914.png",
-      scaledSize: new google.maps.Size(40, 40),
-    },
-  });
-}
-
-function setupMarkerInfoWindow(marker, station) {
-  marker.addListener("mouseover", () => {
-    infoWindow.setContent(content);
-    infoWindow.open(map, marker);
-  });
-}
-
-function clearMarkers() {
-  markers.forEach((marker) => marker.setMap(null));
-  markers = [];
-}
-
-function adjustMapViewToFitMarkers() {
-  if (!markers.length) return;
-  const bounds = new google.maps.LatLngBounds();
-  markers.forEach((marker) => bounds.extend(marker.getPosition()));
-  map.fitBounds(bounds);
-}
-
 function openPanel() {
   document.getElementById("stationDetailsPanel").classList.add("open");
   document.querySelector(".content").classList.remove("fullwidth");
   document.querySelector(".content").classList.add("split");
 }
+
 function closePanel() {
   document.getElementById("stationDetailsPanel").classList.remove("open");
   document.querySelector(".content").classList.remove("split");
@@ -377,6 +347,54 @@ function closePanel() {
   document.getElementById("autocomplete").value = "";
   if (selectedLocationMarker) {
     selectedLocationMarker.setMap(null);
+  }
+}
+
+function loadStationCoordinates(stationsdata) {
+  // Clear existing markers from the map
+  markers.forEach((marker) => marker.setMap(null));
+  markers = []; // Clear the array
+  var infoWindow = new google.maps.InfoWindow();
+
+  stationsdata.forEach((station) => {
+    var marker = new google.maps.Marker({
+      position: { lat: station.lat, lng: station.lng },
+      map: map,
+      title: station.name,
+      icon: {
+        url: "https://cdn-icons-png.flaticon.com/512/6984/6984914.png",
+        scaledSize: new google.maps.Size(40, 40), // Size in pixels
+      },
+    });
+
+    // Create the content for the InfoWindow
+    const content = `<div class="container">
+                          <h1>${station.number} ${station.title}</h1>
+                          <div class="icons">
+                              <span class="icon"> <img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="20px" height="20px"> ${station.available_bikes}</span>
+                              <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Bikes" width="20px" height="20px"> ${station.available_bike_stands}</span>
+                          </div>
+                      </div>`;
+
+    // Add mouseover event listener to show the InfoWindow
+    marker.addListener("mouseover", () => {
+      infoWindow.setContent(content);
+      infoWindow.open(map, marker);
+    });
+
+    // Add mouseout event listener to close the InfoWindow
+    marker.addListener("mouseout", () => {
+      infoWindow.close();
+    });
+
+    markers.push(marker);
+  });
+
+  // Adjust the map view to include all new markers
+  if (markers.length) {
+    let bounds = new google.maps.LatLngBounds();
+    markers.forEach((marker) => bounds.extend(marker.getPosition()));
+    map.fitBounds(bounds);
   }
 }
 
