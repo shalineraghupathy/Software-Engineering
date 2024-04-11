@@ -1,107 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/styles.css" />
 
-    <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
+
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
     />
 
     <title>Dublin Bikes</title>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="../static/index.css" />
   </head>
   <body>
-    <button id="toggleNav" class="toggle-nav-btn">
-      <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="navbar">
-      <div class="page-header">
-        <img class="DB_logo" src="../static/db_logo.png" alt="Logo" />
-        <h1>Dublin Bikes</h1>
-      </div>
+    <!-- Navbar -->
+    <nav class="navbar">
       <ul>
-        <li><a href="#map" class="clickMap">Map</a></li>
-        <li><a href="./Overall.html">Overall</a></li>
-        <li><a href="https://www.dublinbikes.ie/en/newscast">News</a></li>
-
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
-      <div class="user-info">
-        <img src="../static/UCD.jpeg" alt="User Icon" class="user-icon" />
-        <span class="username">Guest User</span>
+    </nav>
+    <div class="wrapper">
+      <div class="search-container">
+        <input
+          id="autocomplete"
+          type="text"
+          placeholder="Search..."
+          class="search-input"
+        />
+        <button class="search-button" type="button">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+      <!-- Content -->
+      <div class="content">
+        <div id="map"></div>
+      </div>
+
+      <!-- slide panel -->
+      <div id="stationDetailsPanel" class="station-details-panel">
+        <button type="button" class="search-button" onclick="closePanel()">
+          <i class="bi bi-x-circle"></i>
+        </button>
+
+        <div id="stationList">Select a location to see nearby stations.</div>
       </div>
     </div>
 
-    <div class="map-container" id="mapContainer">
-      <div id="stationInfo" class="station-info hidden">
-        <!-- 站点信息将在这里动态填充 -->
-      </div>
-
-      <!-- Map top controls -->
-      <div class="map-top-controls">
-        <!-- Search box -->
-        <div class="map-search">
-          <input type="text" id="searchInput" placeholder="Enter Station">
-          <button id="searchButton">Search</button>
-        </div>
-        <!-- Map buttons -->
-        <div class="map-buttons">
-          <button id="free-bikes-btn">Free Bikes</button>
-          <button id="free-stands-btn">Free Stands</button>
-        </div>
-        <div class="weather-info" id="weatherInfo">Loading weather...</div>
-        <!-- Charts dropdown -->
-        <div class="charts-dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="chartsDropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Predictions
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="chartsDropdown">
-            <li>
-              <a class="dropdown-item" href="#hourlychart">Hourly Chart</a>
-            </li>
-            <li><a class="dropdown-item" href="#dailychart">Daily Chart</a></li>
-            <li>
-              <a class="dropdown-item" href="#predictionchart">Prediction Chart</a>
-            </li>
-          </ul>
-        </div>
-
-
-      </div>
-      <!-- Map container -->
-      <div id="map" style="height: 600px"></div>
-    </div>
+    <!-- Footer -->
     <footer class="footer">
-      <div class="container">
-        <p class="text-center">COMP30830 Software-DublinBike Design by Yuhang Lian & Shaline & Arslan, 2024</p>
-      </div>
+      <p>&copy; 2024 Dublin Bikes.</p>
     </footer>
-    <!-- Custom JavaScript -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&callback=initMap"
-      async
-      defer
-    ></script>
-    <script src="../static/index-1.js"></script>
-    <!-- Bootstrap JavaScript library -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
-
-
   </body>
+  <!-- <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&callback=initMap&libraries=places"
+    async
+    defer
+  ></script> -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsQEUc9xAcLloCcowLAgPtEMc5Ir1NgFE&libraries=places,geometry&callback=initMap"
+    async
+    defer
+  ></script>
+
+  <script src="../static/scripts.js"></script>
 </html>

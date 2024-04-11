@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, F
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.exc import SQLAlchemyError
-import DublinBikes.Scrapper.weather.config.dbconfig as dbconfig
+import config.dbconfig as dbconfig
 from sqlalchemy.engine.url import URL
 from sqlalchemy import inspect
 
@@ -17,7 +17,7 @@ class Weather(Base):
     weather_description = Column(String(256))
     weather_id = Column(Integer)
     weather_icon = Column(String(256))
-    position_lat= Column(Float)
+    position_lat = Column(Float)
     position_long = Column(Float)
     temperature = Column(Float)
     feels_like = Column(Float)
@@ -40,11 +40,10 @@ class Weather(Base):
     name = Column(String(256))
     cod = Column(Integer)
 
-
-    def __init__(self, weather_main , weather_description , weather_id , weather_icon ,position_lat,
-    position_long ,temperature ,feels_like , temp_min , temp_max , pressure , humidity ,
-    visibility ,wind_speed ,wind_deg ,clouds_all ,last_update , sys_type , sys_id , sys_country ,
-    sys_sunrise ,sys_sunset ,timezone ,id ,name ,cod ):
+    def __init__(self, weather_main, weather_description, weather_id, weather_icon, position_lat,
+                 position_long, temperature, feels_like, temp_min, temp_max, pressure, humidity,
+                 visibility, wind_speed, wind_deg, clouds_all, last_update, sys_type, sys_id, sys_country,
+                 sys_sunrise, sys_sunset, timezone, id, name, cod):
         self.weather_main = weather_main
         self.weather_description = weather_description
         self.weather_id = weather_id
@@ -71,7 +70,7 @@ class Weather(Base):
         self.id = id
         self.name = name
         self.cod = cod
-              
+
 
 # Create a SQLite database engine
 db_url = URL.create(
@@ -82,7 +81,7 @@ db_url = URL.create(
     port=dbconfig.port,
     database=dbconfig.dbName
 )
-        
+
 # db_url = URL.create(
 #     drivername='mysql+pymysql',
 #     username="root",
@@ -99,6 +98,7 @@ Base.metadata.create_all(engine)
 # Create a session to interact with the database
 Session = sessionmaker(bind=engine)
 
+
 def create_tables():
     try:
         with Session() as session:
@@ -108,6 +108,7 @@ def create_tables():
 
     except Exception as e:
         print(f"Error: {e}")
+
 
 create_tables()
 

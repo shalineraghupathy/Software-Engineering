@@ -1,22 +1,23 @@
-
 import requests
-import DublinBikes.Scrapper.bike.config.apiconfig as apiconfig
-import bike_models
+import config.apiconfig as apiconfig
+import data
 import time
 import datetime
+
 
 def formatdate(value):
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(value))
 
 
-
-def main(): 
-
+def main():
     while True:
         params = {'apiKey': apiconfig.apiKey, 'contract': apiconfig.contract}
         response = requests.get(apiconfig.apiURI, params=params)
-        stations = response.json()
-        print("data retrieve successfully")
+        if response.status_code == 200:
+            stations = response.json()
+            print("data retrived successfully")
+        else:
+            print(f"Error: {response.status_code}")
 
         for station in stations:
             latitude = station.get('position', {}).get('lat', 0.0)
@@ -46,10 +47,9 @@ def main():
                 'status': station['status']
             }
 
-
-            bike_models.add_or_update_station_data(station_data)
-            bike_models.add_availability_data(availability_data)
-        print("Records pushed to db",datetime.datetime.now())
+            data.add_or_update_station_data(station_data)
+            data.add_availability_data(availability_data)
+        print("Records pushed to db", datetime.datetime.now())
         print("Next load starts in 5 minutes")
         time.sleep(5 * 60)
 

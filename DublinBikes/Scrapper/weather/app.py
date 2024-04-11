@@ -1,15 +1,18 @@
 import requests
 import config.weatherconfig as apiconfig
-import weather_model
+import weather
 import time
 import datetime
 import logging
 
+
 def formatdate(value):
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(value))
 
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
+
 
 def main():
     while True:
@@ -22,14 +25,14 @@ def main():
 
             # Check if 'weather' is a list and get the first element
             weather_info = data.get('weather', [{}])[0]
-            
+
             position_lat = data.get('coord', {}).get('lat', 0.0)
             position_long = data.get('coord', {}).get('lon', 0.0)
             weather_id = weather_info.get('id', 0.0)
             weather_main = weather_info.get('main', "")
             weather_description = weather_info.get('description', "")
             weather_icon = weather_info.get('icon', 0.0)
-            
+
             temperature = data.get('main', {}).get('temp', 0.0)
             feels_like = data.get('main', {}).get('feels_like', 0.0)
             temp_min = data.get('main', {}).get('temp_min', 0.0)
@@ -81,11 +84,12 @@ def main():
                 'cod': cod
             }
 
-            weather_model.add_weather_data(weather_data)
+            weather.add_weather_data(weather_data)
             logging.info("Weather Data Updated!")
             time.sleep(30 * 60)
         else:
             logging.error(f"Error: {response.status_code}")
+
 
 if __name__ == '__main__':
     main()

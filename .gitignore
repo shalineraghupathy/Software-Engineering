@@ -1,1 +1,3 @@
 /DublinBikes/flask_app/.idea/
+/DublinBikes/models/rf_bikes_model.pickle
+/DublinBikes/models/rf_stands_model.pickle
