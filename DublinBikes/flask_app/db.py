@@ -130,22 +130,22 @@ class Weather(Base):
 
 def db_engine():
     try:
-        #     db_url = URL.create(
-        #     drivername='mysql+pymysql',
-        #     username=config.username,
-        #     password=config.password,
-        #     host=config.dbEndpoint,
-        #     port=config.port,
-        #     database=config.dbName
-        # )
         db_url = URL.create(
             drivername='mysql+pymysql',
-            username="root",
-            password="Shachu@0203",
-            host="localhost",
-            port="3306",
-            database="dbikestest"
+            username=config.username,
+            password=config.password,
+            host=config.dbEndpoint,
+            port=config.port,
+            database=config.dbName
         )
+        # db_url = URL.create(
+        #     drivername='mysql+pymysql',
+        #     username="root",
+        #     password="Shachu@0203",
+        #     host="localhost",
+        #     port="3306",
+        #     database="dbikestest"
+        # )
         engine = create_engine(db_url, echo=False)
         return engine
     except Exception as ex:

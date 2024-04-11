@@ -4,7 +4,8 @@ import db
 import time
 import datetime
 import threading
-
+import pickle
+import pandas as pd
 
 def formatdate(value):
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(value))
@@ -138,7 +139,6 @@ def scrape_weather_data():
 
         db.add_weather_data(weather_data)
         time.sleep(1 * 60)
-
 
 def main():
     thread1 = threading.Thread(target=scrape_bikes_data)

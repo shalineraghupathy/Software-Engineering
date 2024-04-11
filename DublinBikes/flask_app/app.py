@@ -40,6 +40,5 @@ def get_stations():
         print(traceback.format_exc())
         return "error in index", 404
 
-
 if __name__ == '__main__':
     app.run(debug=True)

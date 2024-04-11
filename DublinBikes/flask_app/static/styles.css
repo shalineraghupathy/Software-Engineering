@@ -1,0 +1,154 @@
+/* Reset some default styles */
+body,
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Ensure html and body are full height for flexbox layout */
+html,
+body {
+  height: 100%;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #333;
+  padding: 10px;
+  position: fixed; /* Make navbar always visible */
+  width: 100%; /* Ensure navbar stretches across the full width */
+  top: 0; /* Fix to the top */
+  z-index: 10; /* Ensure it's above other content */
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding-left: 0; /* Remove default padding */
+}
+
+.navbar li {
+  display: inline;
+  margin-right: 20px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+/* Improved focus style for better accessibility */
+.navbar a:focus,
+.search-input:focus,
+.search-button:focus {
+  outline: none; /* Visible and contrasting outline */
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure wrapper fills the screen vertically */
+}
+
+/* Content styles */
+.content {
+  text-align: center;
+  flex: 1; /* Allow content to grow and fill available space */
+  position: relative; /* Adjusted for better control */
+}
+
+#map {
+  width: 100%;
+  height: 100%; /* Adjust height to fill content area */
+}
+
+/* Style for search container */
+.search-container {
+  position: absolute;
+  top: 70px; /* Adjusted for fixed navbar */
+  left: 45px;
+  z-index: 5;
+  border-radius: 25px;
+  background-color: #fff;
+  padding: 0 15px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.search-input {
+  border: none;
+  padding: 5px;
+}
+
+.search-button {
+  /* padding: 0; */
+  /* margin: 5px; */
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.station-details-panel {
+  position: fixed;
+  left: 0;
+  width: 25%; /* Panel takes up 30% of the width */
+  height: 100%;
+  background-color: #fff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s ease;
+  transform: translateX(-100%); /* Start off-screen */
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.station-details-panel.open {
+  transform: translateX(0);
+}
+.card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.card h4,
+.card p {
+  margin: 0;
+  padding: 2px 0;
+}
+
+#stationList {
+  margin-top: 20px;
+  overflow-y: scroll;
+}
+
+/* Footer styles */
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .navbar li {
+    display: block; /* Stack nav items vertically on small screens */
+    margin: 10px 0; /* Add some vertical spacing */
+  }
+
+  .search-container {
+    top: 70px; /* Adjust search bar position below stacked navbar */
+  }
+
+  .station-details-panel {
+    width: 100%; /* Panel takes full width on smaller screens */
+  }
+}
