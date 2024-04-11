@@ -1,0 +1,115 @@
+address,banking,bike_stands,bonus,contract_name,name,number,position_lat,position_long
+"Clarendon Row",0,31,0,dublin,"CLARENDON ROW",1,53.340927,-6.262501
+"Blessington Street",0,20,0,dublin,"BLESSINGTON STREET",2,53.356769,-6.26814
+"Bolton Street",0,20,0,dublin,"BOLTON STREET",3,53.351182,-6.269859
+"Greek Street",0,20,0,dublin,"GREEK STREET",4,53.346874,-6.272976
+"Charlemont Street",0,40,0,dublin,"CHARLEMONT PLACE",5,53.330662,-6.260177
+"Christchurch Place",0,20,0,dublin,"CHRISTCHURCH PLACE",6,53.343368,-6.27012
+"High Street",0,29,0,dublin,"HIGH STREET",7,53.343565,-6.275071
+"Custom House Quay",0,30,0,dublin,"CUSTOM HOUSE QUAY",8,53.347884,-6.248048
+"Exchequer Street",0,24,0,dublin,"EXCHEQUER STREET",9,53.343034,-6.263578
+"Dame Street",1,16,0,dublin,"DAME STREET",10,53.344007,-6.266802
+"Earlsfort Terrace",0,30,0,dublin,"EARLSFORT TERRACE",11,53.334295,-6.258503
+"Eccles Street",0,20,0,dublin,"ECCLES STREET",12,53.359246,-6.269779
+"Fitzwilliam Square West",0,30,0,dublin,"FITZWILLIAM SQUARE WEST",13,53.336074,-6.252825
+"Fownes Street Upper",0,30,0,dublin,"FOWNES STREET UPPER",14,53.344603,-6.263371
+"Hardwicke Street",0,16,0,dublin,"HARDWICKE STREET",15,53.355473,-6.264423
+"Georges Quay",0,20,0,dublin,"GEORGES QUAY",16,53.347508,-6.252192
+"Golden Lane",0,20,0,dublin,"GOLDEN LANE",17,53.340803,-6.267732
+"Grantham Street",0,30,0,dublin,"GRANTHAM STREET",18,53.334123,-6.265436
+"Herbert Place",0,30,0,dublin,"HERBERT PLACE",19,53.334432,-6.245575
+"James Street East",0,30,0,dublin,"JAMES STREET EAST",20,53.336597,-6.248109
+"Leinster Street South",0,30,0,dublin,"LEINSTER STREET SOUTH",21,53.34218,-6.254485
+"Townsend Street",0,20,0,dublin,"TOWNSEND STREET",22,53.345922,-6.254614
+"Custom House",0,30,0,dublin,"CUSTOM HOUSE",23,53.348279,-6.254662
+"Cathal Brugha Street",0,20,0,dublin,"CATHAL BRUGHA STREET",24,53.352149,-6.260533
+"Merrion Square East",0,30,0,dublin,"MERRION SQUARE EAST",25,53.339434,-6.246548
+"Merrion Square West",1,20,0,dublin,"MERRION SQUARE WEST",26,53.339764,-6.251988
+"Molesworth Street",0,20,0,dublin,"MOLESWORTH STREET",27,53.341288,-6.258117
+"Mountjoy Square West",0,30,0,dublin,"MOUNTJOY SQUARE WEST",28,53.356299,-6.258586
+"Ormond Quay Upper",0,29,0,dublin,"ORMOND QUAY UPPER",29,53.346057,-6.268001
+"Parnell Square North",0,20,0,dublin,"PARNELL SQUARE NORTH",30,53.3537415547453,-6.26530144781526
+"Parnell Street",0,20,0,dublin,"PARNELL STREET",31,53.350929,-6.265125
+"Pearse Street",0,30,0,dublin,"PEARSE STREET",32,53.344304,-6.250427
+"Princes Street / O'Connell Street",1,23,0,dublin,"PRINCES STREET / O'CONNELL STREET",33,53.349013,-6.260311
+"Portobello Harbour",0,30,0,dublin,"PORTOBELLO HARBOUR",34,53.330362,-6.265163
+Smithfield,0,30,0,dublin,SMITHFIELD,35,53.347692,-6.278214
+"St. Stephen's Green East",0,40,0,dublin,"ST. STEPHEN'S GREEN EAST",36,53.337824,-6.256035
+"St. Stephen's Green South",1,30,0,dublin,"ST. STEPHEN'S GREEN SOUTH",37,53.337494,-6.26199
+"Talbot Street",0,40,0,dublin,"TALBOT STREET",38,53.350974,-6.25294
+"Wilton Terrace",0,20,0,dublin,"WILTON TERRACE",39,53.332383,-6.252717
+"Jervis Street",0,21,0,dublin,"JERVIS STREET",40,53.3483,-6.266651
+"Harcourt Terrace",0,20,0,dublin,"HARCOURT TERRACE",41,53.332763,-6.257942
+"Smithfield North",0,30,0,dublin,"SMITHFIELD NORTH",42,53.349562,-6.278198
+"Portobello Road",0,30,0,dublin,"PORTOBELLO ROAD",43,53.330091,-6.268044
+"Upper Sherrard Street",0,30,0,dublin,"UPPER SHERRARD STREET",44,53.358437,-6.260641
+"Deverell Place",0,30,0,dublin,"DEVERELL PLACE",45,53.351464,-6.255265
+"Herbert Street",0,40,0,dublin,"HERBERT STREET",47,53.335742,-6.24551
+"Excise Walk",0,40,0,dublin,"EXCISE WALK",48,53.347777,-6.244239
+"Guild Street",0,40,0,dublin,"GUILD STREET",49,53.347932,-6.240928
+"George's Lane",0,40,0,dublin,"GEORGES LANE",50,53.35023,-6.279696
+"York Street West",0,40,0,dublin,"YORK STREET WEST",51,53.339334,-6.264699
+"York Street East",0,32,0,dublin,"YORK STREET EAST",52,53.338755,-6.262003
+"Newman House",0,40,0,dublin,"NEWMAN HOUSE",53,53.337132,-6.26059
+"Clonmel Street",0,33,0,dublin,"CLONMEL STREET",54,53.336021,-6.26298
+"Hatch Street",0,36,0,dublin,"HATCH STREET",55,53.33403,-6.260714
+"Mount Street Lower",0,40,0,dublin,"MOUNT STREET LOWER",56,53.33796,-6.24153
+"Grattan Street",0,23,0,dublin,"GRATTAN STREET",57,53.339629,-6.243778
+"Sir Patrick's Dun",0,40,0,dublin,"SIR PATRICK DUN'S",58,53.339218,-6.240642
+"Denmark Street Great",0,20,0,dublin,"DENMARK STREET GREAT",59,53.35561,-6.261397
+"North Circular Road",0,30,0,dublin,"NORTH CIRCULAR ROAD",60,53.359624,-6.260348
+"Hardwicke Place",0,25,0,dublin,"HARDWICKE PLACE",61,53.357043,-6.263232
+"Lime Street",0,40,0,dublin,"LIME STREET",62,53.346026,-6.243576
+"Fenian Street",0,35,0,dublin,"FENIAN STREET",63,53.341428,-6.24672
+"Sandwith Street",0,40,0,dublin,"SANDWITH STREET",64,53.345203,-6.247163
+"Convention Centre",1,40,0,dublin,"CONVENTION CENTRE",65,53.34744,-6.238523
+"New Central Bank",0,40,0,dublin,"NEW CENTRAL BANK",66,53.347122,-6.234749
+"The Point",0,40,0,dublin,"THE POINT",67,53.346867,-6.230852
+"Hanover Quay",0,40,0,dublin,"HANOVER QUAY",68,53.344115,-6.237153
+"Grand Canal Dock",0,40,0,dublin,"GRAND CANAL DOCK",69,53.342638,-6.238695
+"Kevin Street",0,40,0,dublin,"KEVIN STREET",71,53.337757,-6.267699
+"John Street West",0,31,0,dublin,"JOHN STREET WEST",72,53.343105,-6.277167
+"Francis Street",0,30,0,dublin,"FRANCIS STREET",73,53.342081,-6.275233
+"Oliver Bond Street",0,30,0,dublin,"OLIVER BOND STREET",74,53.343893,-6.280531
+"James Street",0,40,0,dublin,"JAMES STREET",75,53.343456,-6.287409
+"Market Street South",0,38,0,dublin,"MARKET STREET SOUTH",76,53.342296,-6.287661
+"Wolfe Tone Street",0,29,0,dublin,"WOLFE TONE STREET",77,53.348875,-6.267459
+"Mater Hospital",0,40,0,dublin,"MATER HOSPITAL",78,53.359967,-6.264828
+"Eccles Street East",0,27,0,dublin,"ECCLES STREET EAST",79,53.358115,-6.265601
+"St James Hospital (Luas)",0,40,0,dublin,"ST JAMES HOSPITAL (LUAS)",80,53.341359,-6.292951
+"Mount Brown",0,22,0,dublin,"MOUNT BROWN",82,53.341645,-6.29719
+"Emmet Road",0,40,0,dublin,"EMMET ROAD",83,53.340714,-6.308191
+"Brookfield Road",0,30,0,dublin,"BROOKFIELD ROAD",84,53.339005,-6.300217
+"Rothe Abbey",0,35,0,dublin,"ROTHE ABBEY",85,53.338776,-6.30395
+"Parkgate Street",0,38,0,dublin,"PARKGATE STREET",86,53.347972,-6.291804
+"Collins Barracks Museum",0,38,0,dublin,"COLLINS BARRACKS MUSEUM",87,53.347477,-6.28525
+"Blackhall Place",0,30,0,dublin,"BLACKHALL PLACE",88,53.3488,-6.281637
+"Fitzwilliam Square East",0,40,0,dublin,"FITZWILLIAM SQUARE EAST",89,53.335211,-6.2509
+"Benson Street",0,40,0,dublin,"BENSON STREET",90,53.344153,-6.233451
+"South Dock Road",0,30,0,dublin,"SOUTH DOCK ROAD",91,53.341833,-6.231291
+"Heuston Bridge (North)",0,40,0,dublin,"HEUSTON BRIDGE (NORTH)",92,53.347802,-6.292432
+"Heuston Station (Central)",0,40,0,dublin,"HEUSTON STATION (CENTRAL)",93,53.346603,-6.296924
+"Heuston Station (Car Park)",0,40,0,dublin,"HEUSTON STATION (CAR PARK)",94,53.346985,-6.297804
+"Royal Hospital",0,40,0,dublin,"ROYAL HOSPITAL",95,53.343897,-6.29706
+"Kilmainham Lane",0,30,0,dublin,"KILMAINHAM LANE",96,53.341805,-6.305085
+"Kilmainham Gaol",0,40,0,dublin,"KILMAINHAM GAOL",97,53.342113,-6.310015
+"Frederick Street South",0,40,0,dublin,"FREDERICK STREET SOUTH",98,53.341515,-6.256853
+"City Quay",0,30,0,dublin,"CITY QUAY",99,53.346637,-6.246154
+"Heuston Bridge (South)",0,25,0,dublin,"HEUSTON BRIDGE (SOUTH)",100,53.347106,-6.292041
+"King Street North",0,30,0,dublin,"KING STREET NORTH",101,53.350291,-6.273507
+"Western Way",0,40,0,dublin,"WESTERN WAY",102,53.354929,-6.269425
+"Grangegorman Lower (South)",0,40,0,dublin,"GRANGEGORMAN LOWER (SOUTH)",103,53.354663,-6.278681
+"Grangegorman Lower (Central)",0,40,0,dublin,"GRANGEGORMAN LOWER (CENTRAL)",104,53.355173,-6.278424
+"Grangegorman Lower (North)",0,36,0,dublin,"GRANGEGORMAN LOWER (NORTH)",105,53.355954,-6.278378
+"Rathdown Road",0,40,0,dublin,"RATHDOWN ROAD",106,53.35893,-6.280337
+"Charleville Road",0,40,0,dublin,"CHARLEVILLE ROAD",107,53.359157,-6.281866
+"Avondale Road",0,35,0,dublin,"AVONDALE ROAD",108,53.359405,-6.276142
+"Buckingham Street Lower",0,29,0,dublin,"BUCKINGHAM STREET LOWER",109,53.353331,-6.249319
+"Phibsborough Road",0,40,0,dublin,"PHIBSBOROUGH ROAD",110,53.356307,-6.273717
+"Mountjoy Square East",0,40,0,dublin,"MOUNTJOY SQUARE EAST",111,53.356717,-6.256359
+"North Circular Road (O'Connell's)",0,30,0,dublin,"NORTH CIRCULAR ROAD (O'CONNELL'S)",112,53.357841,-6.251557
+"Merrion Square South",0,40,0,dublin,"MERRION SQUARE SOUTH",113,53.338614,-6.248606
+"Wilton Terrace (Park)",0,40,0,dublin,"WILTON TERRACE (PARK)",114,53.333653,-6.248345
+"Killarney Street",0,30,0,dublin,"KILLARNEY STREET",115,53.354845,-6.247579
+Broadstone,0,30,0,dublin,BROADSTONE,116,53.3547,-6.272314
+"Hanover Quay East",0,40,0,dublin,"HANOVER QUAY EAST",117,53.343653,-6.231755

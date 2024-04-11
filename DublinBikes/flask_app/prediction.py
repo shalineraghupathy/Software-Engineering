@@ -20,6 +20,8 @@ file_path = '../Scrapper/weather/forecast_5days.json'
 with open(file_path, 'r') as file:
     weather_data = json.load(file)
 
+df_stations = pd.read_csv('station.csv')
+print(df_stations.head())
 # Convert the JSON data to a DataFrame
 df_weather = pd.DataFrame({
     'dt_txt': [item['dt_txt'] for item in weather_data['list']],
@@ -51,7 +53,7 @@ df_weather.drop('weather_main', axis=1, inplace=True)
 df_weather = pd.concat([df_weather, df_weather_encoded], axis=1)
 
 # Add an index column for 'number' if it was a feature used in model training
-df_weather['number'] = np.arange(len(df_weather))
+df_weather['number'] = df_stations['number']
 
 # Ensure DataFrame includes all required columns from training, with missing ones filled with zeros
 columns_order = [
@@ -66,8 +68,16 @@ for column in columns_order:
 # Reorder DataFrame to match training feature order
 model_features = df_weather[columns_order]
 
+if hasattr(bike_model, 'feature_names_in_'):
+    print("Bike Model Training feature names:")
+    print(bike_model.feature_names_in_)
+else:
+    print("Model does not have feature_names_in_ attribute.")
 # Predict using the pre-trained models
 def predict_from_features(features):
     pred_bikes = bike_model.predict(features)
     pred_stands = stands_model.predict(features)
     return pred_bikes, pred_stands
+bike, stands = predict_from_features(model_features)
+print(bike)
+print(stands)
