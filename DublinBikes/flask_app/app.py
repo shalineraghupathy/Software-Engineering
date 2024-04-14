@@ -3,6 +3,7 @@ from sqlalchemy import text
 import traceback
 from flask_googlemaps import GoogleMaps
 import data
+import json
 
 app = Flask(__name__)
 
@@ -39,6 +40,14 @@ def get_stations():
     except:
         print(traceback.format_exc())
         return "error in index", 404
+
+# Load predictions data
+with open('predictions.json') as f:
+    predictions_data = json.load(f)
+
+@app.route('/predictions')
+def get_predictions():
+    return {'predictions': predictions_data}
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -374,34 +374,44 @@ function createMarkerForStation(station) {
 }
 
 function updateSlidePanel(data, type) {
-  var stationList = document.getElementById("stationList");
-  stationList.innerHTML = ""; // Clear current content
+    var stationList = document.getElementById("stationList");
+    stationList.innerHTML = "";  // Clear current content
 
-  if (type === "stationDetails") {
-    // Assuming data contains station information including lat, lng
-    var directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${data.lat},${data.lng}&travelmode=bicycling`;
-    var elem = document.createElement("div");
-    elem.classList.add("card");
-    elem.innerHTML = `<h4>${data.title}</h4>
-                      <p>Bikes available: ${data.available_bikes}</p>
-                      <p>Stands available: ${data.available_bike_stands}</p>
-                      <p>Status: ${data.status}</p>
-                      <button onclick="getDirections(${data.lat}, ${data.lng})">Get Directions</button>`;
-    // <a href="${directionsUrl}" target="_blank">Get Directions</a>`; // Link to Google Maps directions
-    stationList.appendChild(elem);
-  } else if (type === "searchResults") {
-    // Displaying search results or nearest stations
-    data.forEach((station) => {
-      var elem = document.createElement("div");
-      elem.classList.add("card");
-      elem.innerHTML = `<h4>${station.title}</h4>
-                        <p>Bikes available: ${station.available_bikes}</p>
-                        <p>Stands available: ${station.available_bike_stands}</p>
-                        <p>Distance: ${station.distance} m</p>`; // Adjust content as needed
-      stationList.appendChild(elem);
-    });
-  }
+    if (type === "stationDetails") {
+        // Fetch predictions from the global variable `predictionsData`
+        var predictions = predictionsData.filter(p => p.station_number === data.number);
+        var predictionInfo = predictions.map(p =>
+            `<p>Predicted Bikes at ${p.hour}:00 on ${p.date}: ${p.predicted_bikes}, Predicted Stands: ${p.predicted_stands}</p>`
+        ).join('');
+
+        var elem = document.createElement("div");
+        elem.classList.add("card");
+        elem.innerHTML = `<h4>${data.title}</h4>
+                          <p>Bikes available: ${data.available_bikes}</p>
+                          <p>Stands available: ${data.available_bike_stands}</p>
+                          <p>Status: ${data.status}</p>
+                          ${predictionInfo}
+                          <button onclick="getDirections(${data.lat}, ${data.lng})">Get Directions</button>`;
+        stationList.appendChild(elem);
+    } else if (type === "searchResults") {
+        data.forEach((station) => {
+            var predictions = predictionsData.filter(p => p.station_number === station.number);
+            var predictionInfo = predictions.map(p =>
+                `<p>Predicted Bikes at ${p.hour}:00 on ${p.date}: ${p.predicted_bikes}, Predicted Stands: ${p.predicted_stands}</p>`
+            ).join('');
+
+            var elem = document.createElement("div");
+            elem.classList.add("card");
+            elem.innerHTML = `<h4>${station.title}</h4>
+                              <p>Bikes available: ${station.available_bikes}</p>
+                              <p>Stands available: ${station.available_bike_stands}</p>
+                              <p>Distance: ${station.distance} m</p>
+                              ${predictionInfo}`;  // Include prediction info in each card
+            stationList.appendChild(elem);
+        });
+    }
 }
+
 
 function setupMarkerInfoWindow(marker, station) {
   marker.addListener("mouseover", () => {
@@ -530,3 +540,32 @@ function handleLocationError(browserHasGeolocation, pos) {
   );
   infoWindow.open(map);
 }
+
+async function fetchPredictionData() {
+    try {
+        const response = await fetch("/predictions");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.predictions || [];
+    } catch (error) {
+        console.error("Could not fetch prediction data: ", error);
+        alert("Failed to load prediction data. Please try again later.");
+    }
+}
+
+// call this function somewhere in your code to load the data
+var predictionsData = [];
+
+async function initialize() {
+    try {
+        predictionsData = await fetchPredictionData();
+        await initMap();
+    } catch (error) {
+        console.error('Error initializing application:', error);
+    }
+}
+
+initialize(); // Call the function to execute the setup
+
