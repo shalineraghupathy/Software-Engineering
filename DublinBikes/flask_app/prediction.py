@@ -21,7 +21,7 @@ with open(file_path, 'r') as file:
     weather_data = json.load(file)
 
 df_stations = pd.read_csv('station.csv')
-print(df_stations.head())
+
 # Convert the JSON data to a DataFrame
 df_weather = pd.DataFrame({
     'dt_txt': [item['dt_txt'] for item in weather_data['list']],
@@ -52,8 +52,8 @@ df_weather_encoded = pd.DataFrame(weather_main_encoded, columns=weather_columns)
 df_weather.drop('weather_main', axis=1, inplace=True)
 df_weather = pd.concat([df_weather, df_weather_encoded], axis=1)
 
-# Add an index column for 'number' if it was a feature used in model training
-df_weather['number'] = df_stations['number']
+# Merge weather information with station information on 'number' column
+df_merged = pd.merge(df_stations, df_weather, how='cross')
 
 # Ensure DataFrame includes all required columns from training, with missing ones filled with zeros
 columns_order = [
@@ -62,22 +62,38 @@ columns_order = [
     'is_peak_hour'] + list(weather_columns) + ['feels_like_temp']
 
 for column in columns_order:
-    if column not in df_weather.columns:
-        df_weather[column] = 0
+    if column not in df_merged.columns:
+        df_merged[column] = 0
 
 # Reorder DataFrame to match training feature order
-model_features = df_weather[columns_order]
+model_features = df_merged[columns_order]
 
-if hasattr(bike_model, 'feature_names_in_'):
-    print("Bike Model Training feature names:")
-    print(bike_model.feature_names_in_)
-else:
-    print("Model does not have feature_names_in_ attribute.")
-# Predict using the pre-trained models
-def predict_from_features(features):
-    pred_bikes = bike_model.predict(features)
-    pred_stands = stands_model.predict(features)
-    return pred_bikes, pred_stands
-bike, stands = predict_from_features(model_features)
-print(bike)
-print(stands)
+
+def predict_from_features(df):
+    results = []
+    for index, row in df.iterrows():
+        features_df = pd.DataFrame([row[columns_order]], columns=columns_order)
+        #features = row[columns_order].values.reshape(1, -1)  # Ensure using correct order
+        pred_bikes = bike_model.predict(features_df)
+        pred_stands = stands_model.predict(features_df)
+        results.append({
+            'station_number': row['number'],
+            'date': row['date'].strftime('%Y-%m-%d'),  # Format date as string for clarity
+            'hour': int(row['hour']),  # Convert hour to integer to avoid float display
+            'predicted_bikes': int(pred_bikes[0]),  # Convert prediction to integer
+            'predicted_stands': int(pred_stands[0])
+        })
+    return pd.DataFrame(results)
+
+
+predictions = predict_from_features(df_merged)
+print(predictions)
+
+# Convert DataFrame to dictionary
+predictions_dict = predictions.to_dict(orient='records')
+
+# Save predictions to a JSON file
+with open('predictions.json', 'w') as f:
+    json.dump(predictions_dict, f, indent=4)
+
+print("Predictions saved to 'predictions.json'")
