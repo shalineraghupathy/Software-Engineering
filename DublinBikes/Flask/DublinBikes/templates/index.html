@@ -40,12 +40,27 @@
       </div>
       <!-- Content -->
       <div class="content">
+        <div class="filter-button-group">
+          <button
+            id="filter-bikes"
+            class="filter-btn active"
+          ><span class="icon"> <img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="30px" height="30px">
+              Available Bikes
+          </button>
+          <button
+            id="filter-spaces"
+            class="filter-btn"
+            
+          ><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Bikes" width="30px" height="30px">
+              Available Spaces
+          </button>
+        </div>
         <div id="map"></div>
       </div>
 
       <!-- slide panel -->
       <div id="stationDetailsPanel" class="station-details-panel">
-        <button type="button" class="search-button" onclick="closePanel()">
+        <button type="button" class="close-button" onclick="closePanel()">
           <i class="bi bi-x-circle"></i>
         </button>
 

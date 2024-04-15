@@ -6,6 +6,7 @@ var selectedLocationMarker;
 var infoWindow;
 var userLoc = {};
 var currentPolyline;
+var displayType = "bikes";
 
 async function fetchStationData() {
   try {
@@ -330,15 +331,23 @@ function loadStationCoordinates(data) {
   console.log(data);
   clearMarkers();
   data.forEach((station) => {
-    const marker = createMarkerForStation(station);
+    const marker = createMarkerForStation(station, displayType);
     setupMarkerInfoWindow(marker, station);
     markers.push(marker);
   });
   adjustMapViewToFitMarkers();
 }
 
-function createMarkerForStation(station) {
+function createMarkerForStation(station, type) {
   // Updated SVG content with styled text to fit the inner circle
+  var displayText;
+  if (type == "bikes") {
+    displayText = station.available_bikes;
+  } else {
+    displayText = station.available_bike_stands;
+  }
+  console.log(type, displayText);
+
   let svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 38">
       <defs>
           <style>
@@ -353,7 +362,7 @@ function createMarkerForStation(station) {
               <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
               <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
               <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
-              <text class="cls-4" x="50%" y="42%" dominant-baseline="middle" text-anchor="middle">${station.available_bikes}</text>
+              <text class="cls-4" x="50%" y="42%" dominant-baseline="middle" text-anchor="middle">${displayText}</text>
           </g>
       </g>
   </svg>`;
@@ -375,29 +384,37 @@ function createMarkerForStation(station) {
 
 function updateSlidePanel(data, type) {
   var stationList = document.getElementById("stationList");
-  stationList.innerHTML = ""; // Clear current content
+  stationList.innerHTML = "";
 
   if (type === "stationDetails") {
-    // Assuming data contains station information including lat, lng
     var directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${data.lat},${data.lng}&travelmode=bicycling`;
     var elem = document.createElement("div");
     elem.classList.add("card");
-    elem.innerHTML = `<h4>${data.title}</h4>
-                      <p>Bikes available: ${data.available_bikes}</p>
-                      <p>Stands available: ${data.available_bike_stands}</p>
-                      <p>Status: ${data.status}</p>
-                      <button onclick="getDirections(${data.lat}, ${data.lng})">Get Directions</button>`;
-    // <a href="${directionsUrl}" target="_blank">Get Directions</a>`; // Link to Google Maps directions
+    elem.innerHTML = `<h5>${data.title}</h5>
+    <div class="subtext"></div>
+    <div class="icons">
+          <span class="icon"> <img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="30px" height="30px"> ${data.available_bikes}</span>
+          <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Bikes" width="30px" height="30px"> ${data.available_bike_stands}</span>
+     <button onclick="getDirections(${data.lat}, ${data.lng})" style="border: none; background-color: transparent;" class="get-directions">
+    <img src="https://www.svgrepo.com/show/351956/directions.svg" alt="Available Bikes" width="20px" height="20px">
+    </button>
+    </div>
+    `;
     stationList.appendChild(elem);
   } else if (type === "searchResults") {
-    // Displaying search results or nearest stations
     data.forEach((station) => {
       var elem = document.createElement("div");
       elem.classList.add("card");
-      elem.innerHTML = `<h4>${station.title}</h4>
-                        <p>Bikes available: ${station.available_bikes}</p>
-                        <p>Stands available: ${station.available_bike_stands}</p>
-                        <p>Distance: ${station.distance} m</p>`; // Adjust content as needed
+      elem.innerHTML = `<h5>${station.title}</h5>
+                        <div class="subtext"></div>
+                        <div class="icons">
+                              <span class="icon"> <img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="30px" height="30px"> ${station.available_bikes}</span>
+                              <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Bikes" width="30px" height="30px"> ${station.available_bike_stands}</span>
+                         <button onclick="getDirections(${station.lat}, ${station.lng})" style="border: none; background-color: transparent;" class="get-directions">
+                        <img src="https://www.svgrepo.com/show/351956/directions.svg" alt="Available Bikes" width="20px" height="20px">
+                        </button>
+                        </div>
+                        `;
       stationList.appendChild(elem);
     });
   }
@@ -440,51 +457,6 @@ function getDirections(destLat, destLng) {
     }
   });
 }
-
-// function getDirections(destLat, destLng) {
-//   var start = new google.maps.LatLng(userLoc.lat, userLoc.lng);
-//   var end = new google.maps.LatLng(destLat, destLng);
-//   var request = {
-//     origin: start,
-//     destination: end,
-//     travelMode: "DRIVING", // Change as required
-//   };
-
-//   directionsService.route(request, function (result, status) {
-//     if (status === "OK") {
-//       // Clear previous route
-//       if (currentPolyline) {
-//         currentPolyline.setMap(null);
-//       }
-
-//       // Create a new polyline for the route
-//       var routePath = new google.maps.Polyline({
-//         path: result.routes[0].overview_path,
-//         geodesic: true,
-//         strokeColor: "#000000", // Here you can set the color to black
-//         strokeOpacity: 1.0,
-//         strokeWeight: 2,
-//       });
-
-//       routePath.setMap(map);
-//       currentPolyline = routePath; // Store it if you need to clear it later
-//     } else {
-//       window.alert("Directions request failed due to " + status);
-//     }
-//   });
-// }
-
-// function updatePanelContent(station) {
-//   var stationList = document.getElementById("stationList");
-//   stationList.innerHTML = ""; // Clear current content
-//   var elem = document.createElement("div");
-//   elem.classList.add("card");
-//   elem.innerHTML = `<h4>${station.title}</h4>
-//                     <p>Bikes available: ${station.available_bikes}</p>
-//                     <p>Stands available: ${station.available_bike_stands}</p>
-//                     <p>Status: ${station.status}</p>`; // Add more details as needed
-//   stationList.appendChild(elem);
-// }
 
 function clearMarkers() {
   markers.forEach((marker) => marker.setMap(null));
@@ -529,4 +501,47 @@ function handleLocationError(browserHasGeolocation, pos) {
       : "Error: Your browser doesn't support geolocation."
   );
   infoWindow.open(map);
+}
+
+document.getElementById("filter-bikes").addEventListener("click", function () {
+  updateMarkers("bikes");
+  setActiveButton(this);
+});
+
+document.getElementById("filter-spaces").addEventListener("click", function () {
+  updateMarkers("spaces");
+  setActiveButton(this);
+});
+
+function updateMarkers(type) {
+  removeMarkers();
+  displayType = type;
+  stationsData.forEach((station) => {
+    const marker = createMarkerForStation(station, displayType);
+    setupMarkerInfoWindow(marker, station);
+    markers.push(marker);
+  });
+}
+function removeMarkers() {
+  markers.forEach((marker) => {
+    // Fade out effect
+    let opacity = 1.0;
+    let interval = setInterval(() => {
+      if (opacity <= 0.1) {
+        clearInterval(interval);
+        marker.setMap(null);
+      } else {
+        opacity -= 0.1;
+        marker.setOpacity(opacity);
+      }
+    }, 50);
+  });
+  markers = [];
+}
+function setActiveButton(selectedButton) {
+  document.querySelectorAll(".filter-btn").forEach((button) => {
+    button.classList.remove("active");
+  });
+
+  selectedButton.classList.add("active");
 }
