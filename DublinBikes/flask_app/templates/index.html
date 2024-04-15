@@ -49,9 +49,15 @@
           <i class="bi bi-x-circle"></i>
         </button>
 
-        <div id="stationList">Select a location to see nearby stations.</div>
+        <div id="stationList" class="station-list">
+          Select a location to see nearby stations.
+          <div id="predictionsContainer">
+            <select id="dateSelector" onchange="filterPredictionsByDate()">
+            <!-- Options will be populated dynamically -->
+            </select>
+          </div>
+        </div>
       </div>
-    </div>
 
     <!-- Footer -->
     <footer class="footer">

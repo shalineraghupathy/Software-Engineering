@@ -6,7 +6,7 @@ var selectedLocationMarker;
 var infoWindow;
 var userLoc = {};
 var currentPolyline;
-
+var predictionsData = [];
 async function fetchStationData() {
   try {
     const response = await fetch("/stations");
@@ -243,6 +243,7 @@ async function initMap() {
   infoWindow = new google.maps.InfoWindow();
 
   await fetchStationData();
+  await fetchPredictionData();
   initAutocomplete();
   handleUserLocation();
 }
@@ -378,39 +379,85 @@ function updateSlidePanel(data, type) {
     stationList.innerHTML = "";  // Clear current content
 
     if (type === "stationDetails") {
-        // Fetch predictions from the global variable `predictionsData`
-        var predictions = predictionsData.filter(p => p.station_number === data.number);
-        var predictionInfo = predictions.map(p =>
-            `<p>Predicted Bikes at ${p.hour}:00 on ${p.date}: ${p.predicted_bikes}, Predicted Stands: ${p.predicted_stands}</p>`
-        ).join('');
+        // Header for prediction information
+        var header = document.createElement('h6');
+        header.textContent = "Check Future Usage:";
+        stationList.appendChild(header);
 
-        var elem = document.createElement("div");
-        elem.classList.add("card");
-        elem.innerHTML = `<h4>${data.title}</h4>
-                          <p>Bikes available: ${data.available_bikes}</p>
-                          <p>Stands available: ${data.available_bike_stands}</p>
-                          <p>Status: ${data.status}</p>
-                          ${predictionInfo}
-                          <button onclick="getDirections(${data.lat}, ${data.lng})">Get Directions</button>`;
-        stationList.appendChild(elem);
-    } else if (type === "searchResults") {
-        data.forEach((station) => {
-            var predictions = predictionsData.filter(p => p.station_number === station.number);
+        // Date selector setup
+        const dateSelector = document.createElement('select');
+        dateSelector.id = 'dateSelector';
+        const uniqueDates = Array.from(new Set(predictionsData.map(p => p.date)));
+        uniqueDates.forEach(date => {
+            const option = document.createElement('option');
+            option.value = date;
+            option.textContent = `Date: ${date}`;
+            dateSelector.appendChild(option);
+        });
+        stationList.appendChild(dateSelector);
+
+        // Hour selector setup
+        const hourSelector = document.createElement('select');
+        hourSelector.id = 'hourSelector';
+        stationList.appendChild(hourSelector); // Will be populated based on selected date
+
+        // Populate hour options based on the selected date
+        function populateHourOptions() {
+            const selectedDate = dateSelector.value;
+            const availableHours = Array.from(new Set(predictionsData.filter(p => p.date === selectedDate).map(p => p.hour)));
+            hourSelector.innerHTML = ''; // Clear previous options
+            availableHours.forEach(hour => {
+                const option = document.createElement('option');
+                option.value = hour;
+                option.textContent = `Time: ${hour}:00`;
+                hourSelector.appendChild(option);
+            });
+        }
+        populateHourOptions(); // Populate initially
+        dateSelector.onchange = populateHourOptions; // Repopulate when date changes
+
+        // Function to update the details below the selectors based on the selected date and hour
+        function updatePredictionDetails() {
+            const selectedDate = dateSelector.value;
+            const selectedHour = hourSelector.value;
+            const predictions = predictionsData.filter(p => p.station_number === data.number && p.date === selectedDate && p.hour == selectedHour);
             var predictionInfo = predictions.map(p =>
-                `<p>Predicted Bikes at ${p.hour}:00 on ${p.date}: ${p.predicted_bikes}, Predicted Stands: ${p.predicted_stands}</p>`
+                `<p>Free Bikes-Predition: ${p.predicted_bikes}, <br> Free Stands-Predition: ${p.predicted_stands}</p>`
             ).join('');
 
+            const detailsDiv = document.getElementById('detailsDiv') || document.createElement("div");
+            detailsDiv.id = 'detailsDiv';
+            detailsDiv.innerHTML = `<h4>${data.title}</h4>
+                                    <p>Availiable bikes: ${data.available_bikes}</p>
+                                    <p>Availiable stands: ${data.available_bike_stands}</p>
+                                    <p>state: ${data.status}</p>
+                                    ${predictionInfo}
+                                    <button onclick="getDirections(${data.lat}, ${data.lng})">Get Route</button>`;
+            if (!document.getElementById('detailsDiv')) {
+                stationList.appendChild(detailsDiv);
+            }
+        }
+
+        // Initialize the details display and set up the onchange event listener
+        updatePredictionDetails();
+        hourSelector.onchange = updatePredictionDetails;  // Update details when hour changes
+    } else if (type === "searchResults") {
+        // Handle array of stations for search results
+        data.forEach(station => {
             var elem = document.createElement("div");
             elem.classList.add("card");
-            elem.innerHTML = `<h4>${station.title}</h4>
-                              <p>Bikes available: ${station.available_bikes}</p>
-                              <p>Stands available: ${station.available_bike_stands}</p>
-                              <p>Distance: ${station.distance} m</p>
-                              ${predictionInfo}`;  // Include prediction info in each card
+            elem.innerHTML = `<h4>${data.title}</h4>
+                              <p>Availiable bikes: ${data.available_bikes}</p>
+                              <p>Availiable stands: ${data.available_bike_stands}</p>
+                              <p>Distance: ${station.distance} Meter</p>`;
             stationList.appendChild(elem);
         });
     }
 }
+
+
+
+
 
 
 function setupMarkerInfoWindow(marker, station) {
@@ -548,20 +595,58 @@ async function fetchPredictionData() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data.predictions || [];
+        predictionsData = data.predictions || []; // Set the global variable directly
     } catch (error) {
         console.error("Could not fetch prediction data: ", error);
         alert("Failed to load prediction data. Please try again later.");
     }
 }
 
-// call this function somewhere in your code to load the data
-var predictionsData = [];
+
+function populateDateSelector() {
+    const dateSet = new Set(predictionsData.map(data => data.date));
+    const dateSelector = document.getElementById('dateSelector');
+    dateSelector.innerHTML = ''; // Clear existing options
+    dateSet.forEach(date => {
+        const option = document.createElement('option');
+        option.value = date;
+        option.textContent = date;
+        dateSelector.appendChild(option);
+    });
+}
+
+function filterPredictionsByDate() {
+    const selectedDate = document.getElementById('dateSelector').value;
+    const filteredPredictions = predictionsData.filter(p => p.date === selectedDate);
+}
+
+function updatePredictionDetails(station) {
+    const selectedDate = document.getElementById('dateSelector').value;
+    const predictions = predictionsData.filter(p => p.station_number === station.number && p.date === selectedDate);
+    var predictionInfo = predictions.map(p =>
+        `<p>Predicted Bikes at ${p.hour}:00: ${p.predicted_bikes}, Predicted Stands: ${p.predicted_stands}</p>`
+    ).join('');
+
+    const detailsDiv = document.createElement("div");
+    detailsDiv.innerHTML = `<h4>${station.title}</h4>
+                            <p>Bikes available: ${station.available_bikes}</p>
+                            <p>Stands available: ${station.available_bike_stands}</p>
+                            <p>Status: ${station.status}</p>
+                            ${predictionInfo}`;
+    if (document.getElementById('detailsDiv')) {
+        stationList.removeChild(document.getElementById('detailsDiv'));
+    }
+    detailsDiv.id = 'detailsDiv';
+    stationList.appendChild(detailsDiv);
+}
 
 async function initialize() {
     try {
-        predictionsData = await fetchPredictionData();
-        await initMap();
+        await fetchStationData();  // Make sure station data is fetched first
+        await fetchPredictionData();
+        populateDateSelector();    // Setup the date selector with available dates
+        filterPredictionsByDate(); // Immediately filter to the default or first available date
+        initMap();
     } catch (error) {
         console.error('Error initializing application:', error);
     }
