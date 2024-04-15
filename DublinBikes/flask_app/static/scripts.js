@@ -372,7 +372,7 @@ function createMarkerForStation(station) {
     },
   });
 }
-
+            // `<p>Predicted Bikes at ${p.hour}:00 on ${p.date}: ${p.predicted_bikes}, Predicted Stands: ${p.predicted_stands}</p>`
 function updateSlidePanel(data, type) {
     var stationList = document.getElementById("stationList");
     stationList.innerHTML = "";  // Clear current content
@@ -381,7 +381,12 @@ function updateSlidePanel(data, type) {
         // Fetch predictions from the global variable `predictionsData`
         var predictions = predictionsData.filter(p => p.station_number === data.number);
         var predictionInfo = predictions.map(p =>
-            `<p>Predicted Bikes at ${p.hour}:00 on ${p.date}: ${p.predicted_bikes}, Predicted Stands: ${p.predicted_stands}</p>`
+            `<tr style="background-color: #f9f9f9">
+                  <td style="width: 30%">${p.date}</td>
+                  <td>${p.hour}:00</td>
+                  <td style="text-align: center">${p.predicted_bikes}</td>
+                  <td style="text-align: center">${p.predicted_stands}</td>
+              </tr>`
         ).join('');
 
         var elem = document.createElement("div");
@@ -390,7 +395,19 @@ function updateSlidePanel(data, type) {
                           <p>Bikes available: ${data.available_bikes}</p>
                           <p>Stands available: ${data.available_bike_stands}</p>
                           <p>Status: ${data.status}</p>
-                          ${predictionInfo}
+                          <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%">Date</th>
+                                    <th>Hour</th>
+                                    <th>Predicted Bikes</th>
+                                    <th>Predicted Stands</th>
+                                </tr>
+                            </thead> 
+                            <tbody>
+                                ${predictionInfo}
+                            </tbody>
+                          </table>
                           <button onclick="getDirections(${data.lat}, ${data.lng})">Get Directions</button>`;
         stationList.appendChild(elem);
     } else if (type === "searchResults") {
