@@ -26,7 +26,7 @@ async function initMap() {
   centerMap = { lat: 53.3419077, lng: -6.2617028 };
   const mapOptions = {
     center: centerMap,
-    zoom: 14,
+    zoom: 17,
     disableDefaultUI: true,
     styles: [
       {
