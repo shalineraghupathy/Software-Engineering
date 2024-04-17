@@ -349,23 +349,25 @@ function createMarkerForStation(station, type) {
   console.log(type, displayText);
 
   let svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 38">
-      <defs>
-          <style>
-              .cls-1{fill:#333;} /* Outer marker color */
-              .cls-2{fill:#ffffff;} /* Main circle color */
-              .cls-3{fill:#ffffff;} /* Inner circle color */
-              .cls-4{font-size:16px; font-family:Arial, sans-serif; fill:#333; font-weight:300;} /* Updated text styling for visibility */
-          </style>
-      </defs>
-      <g id="Layer_2" data-name="Layer 2">
-          <g id="Layer_1-2" data-name="Layer 1">
-              <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
-              <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
-              <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
-              <text class="cls-4" x="50%" y="42%" dominant-baseline="middle" text-anchor="middle">${displayText}</text>
-          </g>
+  <defs>
+    <style>
+      .cls-1{fill:#fff;}
+      .cls-2{fill:#527D84;}
+      .cls-3{fill:#c2c2c2;}
+      .cls-4{font-size:14px; font-family:Arial, sans-serif; fill:#fff; font-weight:250;} 
+    </style>
+    </defs>
+    <g id="offre-abo-on">
+      <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
+      <path d="M15,2A12.94,12.94,0,0,1,27.93,14.93c0,9.12-9.54,17.75-12.93,20.53C11.61,32.69,2.07,24.08,2.07,14.93A12.94,12.94,0,0,1,15,2m0-2A14.93,14.93,0,0,0,.07,14.93C.07,27.14,15,38,15,38S29.93,27.14,29.93,14.93A14.93,14.93,0,0,0,15,0Z"/>
+      <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
+      <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
+      <text class="cls-4" x="50%" y="42%" dominant-baseline="middle" text-anchor="middle">${displayText}</text>
       </g>
-  </svg>`;
+      </svg>`;
+
+  // fff 0097d1 c2c2c2
+  // 333 ffffff ffffff
 
   const blob = new Blob([svgText], { type: "image/svg+xml" });
   const url = URL.createObjectURL(blob);
@@ -377,7 +379,7 @@ function createMarkerForStation(station, type) {
     title: station.name,
     icon: {
       url: url,
-      scaledSize: new google.maps.Size(45, 45),
+      scaledSize: new google.maps.Size(45, 35),
     },
   });
 }
@@ -401,6 +403,15 @@ function updateSlidePanel(data, type) {
     </div>
     `;
     stationList.appendChild(elem);
+    var dPicker = document.createElement("div");
+    dPicker.classList.add("date-time-picker");
+    dPicker.innerHTML = `
+    <label for="date">Plan Your Journey</label>
+    <div >
+      <input type="date" id="date" name="date" />
+      <input type="time" id="time" name="time" />
+    </div>`;
+    stationList.appendChild(dPicker);
   } else if (type === "searchResults") {
     data.forEach((station) => {
       var elem = document.createElement("div");
