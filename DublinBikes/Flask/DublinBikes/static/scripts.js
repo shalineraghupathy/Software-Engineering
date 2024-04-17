@@ -621,9 +621,31 @@ function addDateTimeSelectors(station, container) {
 }
 
 function populateHourOptions(hourSelector, selectedDate) {
+  // const hours = predictionsData
+  //   .filter((p) => p.date === selectedDate)
+  //   .map((p) => p.hour);
+
+  // hourSelector.innerHTML = "";
+
+  // const defaultOption = document.createElement("option");
+  // defaultOption.value = "";
+  // defaultOption.textContent = "Select Time";
+  // defaultOption.selected = true;
+  // defaultOption.disabled = true;
+  // hourSelector.appendChild(defaultOption);
+
+  // hours.forEach((hour) => {
+  //   const option = document.createElement("option");
+  //   option.value = hour;
+  //   option.textContent = `Time: ${hour}:00`;
+  //   hourSelector.appendChild(option);
+  // });
   const hours = predictionsData
     .filter((p) => p.date === selectedDate)
     .map((p) => p.hour);
+
+  // Create a set from the hours array to ensure all values are unique
+  const uniqueHours = Array.from(new Set(hours));
 
   hourSelector.innerHTML = "";
 
@@ -634,7 +656,8 @@ function populateHourOptions(hourSelector, selectedDate) {
   defaultOption.disabled = true;
   hourSelector.appendChild(defaultOption);
 
-  hours.forEach((hour) => {
+  // Use uniqueHours here instead of hours
+  uniqueHours.forEach((hour) => {
     const option = document.createElement("option");
     option.value = hour;
     option.textContent = `Time: ${hour}:00`;
