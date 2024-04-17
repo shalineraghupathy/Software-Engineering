@@ -7,6 +7,11 @@ var infoWindow;
 var userLoc = {};
 var currentPolyline;
 var displayType = "bikes";
+var dateValue = null;
+var timeValue = null;
+var predictionsData = [];
+var dateSelector;
+var hourSelector;
 
 async function fetchStationData() {
   try {
@@ -18,7 +23,22 @@ async function fetchStationData() {
     stationsData = data.stations || [];
   } catch (error) {
     console.error("Could not fetch station data: ", error);
-    alert("Failed to load station data. Please try again later."); // Provide feedback
+    alert("Failed to load station data. Please try again later.");
+  }
+}
+
+async function fetchPredictionData() {
+  try {
+    const response = await fetch("/predictions");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    predictionsData = data.predictions || [];
+    // console.log(predictionsData);
+  } catch (error) {
+    console.error("Could not fetch prediction data: ", error);
+    alert("Failed to load prediction data. Please try again later.");
   }
 }
 
@@ -244,7 +264,9 @@ async function initMap() {
   infoWindow = new google.maps.InfoWindow();
 
   await fetchStationData();
+  await fetchPredictionData();
   initAutocomplete();
+  filterPredictionsByDate;
   handleUserLocation();
 }
 
@@ -261,10 +283,9 @@ function handleUserLocation() {
           map: map,
           title: "Your Location",
           icon: {
-            url: "https://cdn-icons-png.flaticon.com/128/6735/6735939.png", // Example custom icon
-            scaledSize: new google.maps.Size(40, 40), // Size in pixels
+            url: "https://cdn-icons-png.flaticon.com/128/6735/6735939.png",
+            scaledSize: new google.maps.Size(40, 40),
           },
-          //   https://cdn-icons-png.flaticon.com/128/6735/6735939.png
         });
 
         map.setCenter(userLoc);
@@ -312,7 +333,7 @@ function initAutocomplete() {
         selectedLocation,
         stationLocation
       );
-      station.distance = Math.round(distance); // Add distance to the station object
+      station.distance = Math.round(distance);
     });
 
     // Sort stations by distance
@@ -328,7 +349,7 @@ function initAutocomplete() {
 }
 
 function loadStationCoordinates(data) {
-  console.log(data);
+  // console.log(data);
   clearMarkers();
   data.forEach((station) => {
     const marker = createMarkerForStation(station, displayType);
@@ -339,33 +360,33 @@ function loadStationCoordinates(data) {
 }
 
 function createMarkerForStation(station, type) {
-  // Updated SVG content with styled text to fit the inner circle
   var displayText;
   if (type == "bikes") {
     displayText = station.available_bikes;
   } else {
     displayText = station.available_bike_stands;
   }
-  console.log(type, displayText);
 
   let svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 38">
-      <defs>
-          <style>
-              .cls-1{fill:#333;} /* Outer marker color */
-              .cls-2{fill:#ffffff;} /* Main circle color */
-              .cls-3{fill:#ffffff;} /* Inner circle color */
-              .cls-4{font-size:16px; font-family:Arial, sans-serif; fill:#333; font-weight:300;} /* Updated text styling for visibility */
-          </style>
-      </defs>
-      <g id="Layer_2" data-name="Layer 2">
-          <g id="Layer_1-2" data-name="Layer 1">
-              <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
-              <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
-              <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
-              <text class="cls-4" x="50%" y="42%" dominant-baseline="middle" text-anchor="middle">${displayText}</text>
-          </g>
+  <defs>
+    <style>
+      .cls-1{fill:#fff;}
+      .cls-2{fill:#527D84;}
+      .cls-3{fill:#c2c2c2;}
+      .cls-4{font-size:14px; font-family:Arial, sans-serif; fill:#fff; font-weight:250;} 
+    </style>
+    </defs>
+    <g id="offre-abo-on">
+      <path class="cls-1" d="M29.93,14.93C29.93,27.14,15,38,15,38S.07,27.14.07,14.93a14.93,14.93,0,0,1,29.86,0Z"/>
+      <path d="M15,2A12.94,12.94,0,0,1,27.93,14.93c0,9.12-9.54,17.75-12.93,20.53C11.61,32.69,2.07,24.08,2.07,14.93A12.94,12.94,0,0,1,15,2m0-2A14.93,14.93,0,0,0,.07,14.93C.07,27.14,15,38,15,38S29.93,27.14,29.93,14.93A14.93,14.93,0,0,0,15,0Z"/>
+      <path class="cls-2" d="M15,24.61a10,10,0,1,1,10-10A10,10,0,0,1,15,24.61Z"/>
+      <path class="cls-3" d="M15,5.07a9.52,9.52,0,1,1-9.52,9.52A9.53,9.53,0,0,1,15,5.07m0-1A10.52,10.52,0,1,0,25.52,14.59,10.52,10.52,0,0,0,15,4.07Z"/>
+      <text class="cls-4" x="50%" y="42%" dominant-baseline="middle" text-anchor="middle">${displayText}</text>
       </g>
-  </svg>`;
+      </svg>`;
+
+  // fff 0097d1 c2c2c2
+  // 333 ffffff ffffff
 
   const blob = new Blob([svgText], { type: "image/svg+xml" });
   const url = URL.createObjectURL(blob);
@@ -377,47 +398,57 @@ function createMarkerForStation(station, type) {
     title: station.name,
     icon: {
       url: url,
-      scaledSize: new google.maps.Size(45, 45),
+      scaledSize: new google.maps.Size(45, 35),
     },
   });
 }
 
 function updateSlidePanel(data, type) {
-  var stationList = document.getElementById("stationList");
-  stationList.innerHTML = "";
+  const stationList = document.getElementById("stationList");
+  stationList.innerHTML = ""; // Clear the existing content
 
   if (type === "stationDetails") {
-    var directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${data.lat},${data.lng}&travelmode=bicycling`;
-    var elem = document.createElement("div");
-    elem.classList.add("card");
-    elem.innerHTML = `<h5>${data.title}</h5>
-    <div class="subtext"></div>
-    <div class="icons">
-          <span class="icon"> <img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="30px" height="30px"> ${data.available_bikes}</span>
-          <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Bikes" width="30px" height="30px"> ${data.available_bike_stands}</span>
-     <button onclick="getDirections(${data.lat}, ${data.lng})" style="border: none; background-color: transparent;" class="get-directions">
-    <img src="https://www.svgrepo.com/show/351956/directions.svg" alt="Available Bikes" width="20px" height="20px">
-    </button>
-    </div>
-    `;
-    stationList.appendChild(elem);
+    addStationDetailsCard(data, stationList);
+    addDateTimeSelectors(data, stationList);
   } else if (type === "searchResults") {
-    data.forEach((station) => {
-      var elem = document.createElement("div");
-      elem.classList.add("card");
-      elem.innerHTML = `<h5>${station.title}</h5>
-                        <div class="subtext"></div>
-                        <div class="icons">
-                              <span class="icon"> <img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="30px" height="30px"> ${station.available_bikes}</span>
-                              <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Bikes" width="30px" height="30px"> ${station.available_bike_stands}</span>
-                         <button onclick="getDirections(${station.lat}, ${station.lng})" style="border: none; background-color: transparent;" class="get-directions">
-                        <img src="https://www.svgrepo.com/show/351956/directions.svg" alt="Available Bikes" width="20px" height="20px">
-                        </button>
-                        </div>
-                        `;
-      stationList.appendChild(elem);
-    });
+    data.forEach((station) => addStationCard(station, stationList));
   }
+}
+
+function addStationDetailsCard(data, container) {
+  const directionsButtonHTML = `<button onclick="getDirections(${data.lat}, ${data.lng})" style="border:none; background-color:transparent;" class="get-directions">
+      <img src="https://www.svgrepo.com/show/351956/directions.svg" alt="Directions" width="20px" height="20px">
+  </button>`;
+
+  const stationCardHTML = `<div class="card">
+      <h5>${data.title}</h5>
+      <div class="icons">
+          <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="30px" height="30px"> ${data.available_bikes}</span>
+          <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Spaces" width="30px" height="30px"> ${data.available_bike_stands}</span>
+          ${directionsButtonHTML}
+      </div>
+  </div>`;
+
+  const cardElement = document.createElement("div");
+  cardElement.innerHTML = stationCardHTML;
+  container.appendChild(cardElement);
+}
+
+function addStationCard(station, container) {
+  const cardHTML = `<div class="card">
+      <h5>${station.title}</h5>
+      <div class="icons">
+          <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/velo-meca.svg" alt="Available Bikes" width="30px" height="30px">${station.available_bikes}</span>
+          <span class="icon"><img src="https://www.dublinbikes.ie/assets/icons/svg/filtre-map-places-dispos.svg" alt="Available Spaces" width="30px" height="30px">${station.available_bike_stands}</span>
+          <button onclick="getDirections(${station.lat}, ${station.lng})" style="border:none; background-color:transparent;" class="get-directions">
+              <img src="https://www.svgrepo.com/show/351956/directions.svg" alt="Directions" width="20px" height="20px">
+          </button>
+      </div>
+  </div>`;
+
+  const elem = document.createElement("div");
+  elem.innerHTML = cardHTML;
+  container.appendChild(elem);
 }
 
 function setupMarkerInfoWindow(marker, station) {
@@ -544,4 +575,138 @@ function setActiveButton(selectedButton) {
   });
 
   selectedButton.classList.add("active");
+}
+
+function addDateTimeSelectors(station, container) {
+  dateSelector = document.createElement("select");
+  dateSelector.id = "dateSelector";
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Select a date";
+  defaultOption.selected = true;
+  defaultOption.disabled = true;
+  dateSelector.appendChild(defaultOption);
+
+  predictionsData
+    .map((p) => p.date)
+    .forEach((date) => {
+      if (!dateSelector.querySelector(`option[value="${date}"]`)) {
+        const option = document.createElement("option");
+        option.value = date;
+        option.textContent = `Date: ${date}`;
+        dateSelector.appendChild(option);
+      }
+    });
+
+  hourSelector = document.createElement("select");
+  hourSelector.id = "hourSelector";
+  hourSelector.style.display = "none";
+
+  dateSelector.addEventListener("change", () => {
+    populateHourOptions(hourSelector, dateSelector.value);
+    hourSelector.style.display = "block";
+  });
+
+  hourSelector.addEventListener("change", () => {
+    updatePredictionDetails(station, container);
+  });
+
+  const pickerDiv = document.createElement("div");
+  pickerDiv.classList.add("date-time-picker");
+  pickerDiv.appendChild(dateSelector);
+  pickerDiv.appendChild(hourSelector);
+
+  populateHourOptions(hourSelector, dateSelector.value);
+  container.appendChild(pickerDiv);
+}
+
+function populateHourOptions(hourSelector, selectedDate) {
+  // const hours = predictionsData
+  //   .filter((p) => p.date === selectedDate)
+  //   .map((p) => p.hour);
+
+  // hourSelector.innerHTML = "";
+
+  // const defaultOption = document.createElement("option");
+  // defaultOption.value = "";
+  // defaultOption.textContent = "Select Time";
+  // defaultOption.selected = true;
+  // defaultOption.disabled = true;
+  // hourSelector.appendChild(defaultOption);
+
+  // hours.forEach((hour) => {
+  //   const option = document.createElement("option");
+  //   option.value = hour;
+  //   option.textContent = `Time: ${hour}:00`;
+  //   hourSelector.appendChild(option);
+  // });
+  const hours = predictionsData
+    .filter((p) => p.date === selectedDate)
+    .map((p) => p.hour);
+
+  // Create a set from the hours array to ensure all values are unique
+  const uniqueHours = Array.from(new Set(hours));
+
+  hourSelector.innerHTML = "";
+
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Select Time";
+  defaultOption.selected = true;
+  defaultOption.disabled = true;
+  hourSelector.appendChild(defaultOption);
+
+  // Use uniqueHours here instead of hours
+  uniqueHours.forEach((hour) => {
+    const option = document.createElement("option");
+    option.value = hour;
+    option.textContent = `Time: ${hour}:00`;
+    hourSelector.appendChild(option);
+  });
+}
+
+function filterPredictionsByDate() {
+  // Assuming you have a function to filter data based on selected date and time
+  console.log(
+    "Filtering predictions for date:",
+    dateValue,
+    "and time:",
+    timeValue
+  );
+  const filteredPredictions = predictionsData.filter(
+    (p) => p.date === dateValue && p.time === timeValue
+  );
+  console.log(filteredPredictions); // Display or process filtered predictions
+}
+
+function updatePredictionDetails(station, container) {
+  const selectedDate = dateSelector.value;
+  const selectedHour = hourSelector.value;
+
+  const prediction = predictionsData.find(
+    (p) =>
+      p.station_number === station.number &&
+      p.date === selectedDate &&
+      p.hour === parseInt(selectedHour)
+  );
+
+  let resultsContainer = document.getElementById("predictionResults");
+
+  if (!resultsContainer) {
+    resultsContainer = document.createElement("div");
+    resultsContainer.id = "predictionResults";
+    document.body.appendChild(resultsContainer);
+  }
+
+  if (prediction) {
+    const content = `<p>Date: ${prediction.date}</p>
+                         <p>Hour: ${prediction.hour}:00</p>
+                         <p>Predicted Bikes Available: ${prediction.predicted_bikes}</p>
+                         <p>Predicted Stands Available: ${prediction.predicted_stands}</p>`;
+    resultsContainer.innerHTML = content;
+  } else {
+    resultsContainer.innerHTML = "<p>No prediction data available.</p>";
+  }
+
+  container.appendChild(resultsContainer);
 }

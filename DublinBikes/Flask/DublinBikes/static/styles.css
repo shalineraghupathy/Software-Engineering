@@ -14,6 +14,7 @@ ul {
 html,
 body {
   height: 100%;
+  overflow-y: hidden;
 }
 
 /* Navbar styles */
@@ -21,7 +22,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
+  background-color: #114b56;
   color: white;
   padding: 10px 20px;
 }
@@ -155,7 +156,7 @@ body {
 
 /* Footer styles */
 .footer {
-  background-color: #333;
+  background-color: #114b56;
   color: white;
   text-align: center;
   padding: 10px;
@@ -200,7 +201,7 @@ body {
   border-radius: 50px;
   font-family: "Raleway", sans-serif;
   cursor: pointer;
-  color: #333;
+  color: #114b56;
   background-color: #ffffff;
   outline: none;
   transition: background-color 0.3s, color 0.3s;
@@ -208,5 +209,28 @@ body {
 
 .filter-btn.active {
   color: #ffffff;
-  background-color: #333;
+  background-color: #114b56;
+}
+
+/* date time picker */
+
+.date-time-picker {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.date-time-picker label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.date-time-picker input {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
