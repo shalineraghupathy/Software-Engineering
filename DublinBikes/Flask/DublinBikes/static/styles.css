@@ -214,7 +214,7 @@ body {
 
 /* date time picker */
 
-.date-time-picker {
+/* .date-time-picker {
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -233,4 +233,71 @@ body {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+} */
+
+/* General styling for the select boxes */
+select {
+  width: 200px; /* Fixed width for the selectors */
+  padding: 8px; /* Padding inside the select box */
+  margin: 10px; /* Margin around each select box */
+  border: 1px solid #ccc; /* Light grey border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px; /* Readable text size */
+  cursor: pointer; /* Cursor indicates it's selectable */
+}
+#dateSelector {
+  margin-bottom: 20px;
+}
+
+/* Styling when the user interacts with the select */
+select:hover {
+  border-color: #888; /* Darker border on hover */
+}
+
+select:focus {
+  border-color: #0056b3; /* Blue border when focused */
+  outline: none; /* Remove default focus outline */
+}
+
+/* Styling for disabled options */
+select option[disabled] {
+  color: #aaa; /* Grey out disabled option */
+}
+
+/* Hidden elements styling, just in case they need to be unhidden */
+select[style*="display: none"] {
+  display: block !important;
+  visibility: hidden;
+  position: absolute;
+  top: -9999px;
+}
+
+/* Label styling for better accessibility */
+label {
+  font-weight: bold; /* Make labels bold */
+  margin-right: 5px; /* Space between label and select */
+  font-size: 14px; /* Smaller text for labels */
+}
+
+/* results container */
+
+/* Styling for the results container that acts as a card */
+
+#predictionResults {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+/* Additional styling for paragraphs inside the card to manage spacing */
+#predictionResults p {
+  margin-bottom: 12px; /* Spacing between paragraphs */
+}
+
+/* Remove extra space after the last paragraph */
+#predictionResults p:last-child {
+  margin-bottom: 0; /* No extra space after the last paragraph */
 }

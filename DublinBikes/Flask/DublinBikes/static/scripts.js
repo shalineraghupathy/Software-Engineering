@@ -597,6 +597,7 @@ function addDateTimeSelectors(station, container) {
         dateSelector.appendChild(option);
       }
     });
+  var lineBreak = document.createElement("br");
 
   hourSelector = document.createElement("select");
   hourSelector.id = "hourSelector";
@@ -614,6 +615,7 @@ function addDateTimeSelectors(station, container) {
   const pickerDiv = document.createElement("div");
   pickerDiv.classList.add("date-time-picker");
   pickerDiv.appendChild(dateSelector);
+  pickerDiv.appendChild(lineBreak);
   pickerDiv.appendChild(hourSelector);
 
   populateHourOptions(hourSelector, dateSelector.value);
@@ -621,25 +623,6 @@ function addDateTimeSelectors(station, container) {
 }
 
 function populateHourOptions(hourSelector, selectedDate) {
-  // const hours = predictionsData
-  //   .filter((p) => p.date === selectedDate)
-  //   .map((p) => p.hour);
-
-  // hourSelector.innerHTML = "";
-
-  // const defaultOption = document.createElement("option");
-  // defaultOption.value = "";
-  // defaultOption.textContent = "Select Time";
-  // defaultOption.selected = true;
-  // defaultOption.disabled = true;
-  // hourSelector.appendChild(defaultOption);
-
-  // hours.forEach((hour) => {
-  //   const option = document.createElement("option");
-  //   option.value = hour;
-  //   option.textContent = `Time: ${hour}:00`;
-  //   hourSelector.appendChild(option);
-  // });
   const hours = predictionsData
     .filter((p) => p.date === selectedDate)
     .map((p) => p.hour);
@@ -699,10 +682,9 @@ function updatePredictionDetails(station, container) {
   }
 
   if (prediction) {
-    const content = `<p>Date: ${prediction.date}</p>
-                         <p>Hour: ${prediction.hour}:00</p>
-                         <p>Predicted Bikes Available: ${prediction.predicted_bikes}</p>
-                         <p>Predicted Stands Available: ${prediction.predicted_stands}</p>`;
+    const content = ` <h5>Predicted Availability</h5>
+                         <p>Bikes: ${prediction.predicted_bikes}</p>
+                         <p>Stands: ${prediction.predicted_stands}</p>`;
     resultsContainer.innerHTML = content;
   } else {
     resultsContainer.innerHTML = "<p>No prediction data available.</p>";
