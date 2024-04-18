@@ -267,38 +267,58 @@ async function initMap() {
   await fetchPredictionData();
   initAutocomplete();
   filterPredictionsByDate;
-  // handleUserLocation();
-  loadStationCoordinates(stationsData);
+  handleUserLocation();
+  // loadStationCoordinates(stationsData);
 }
 
 function handleUserLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        userLoc = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        var marker = new google.maps.Marker({
-          position: userLoc,
-          map: map,
-          title: "Your Location",
-          icon: {
-            url: "https://cdn-icons-png.flaticon.com/128/6735/6735939.png",
-            scaledSize: new google.maps.Size(40, 40),
-          },
-        });
-        map.setCenter(userLoc);
-        loadStationCoordinates(stationsData);
-      },
-      () => {
-        handleLocationError(true, map.getCenter());
-      }
-    );
-  } else {
-    handleLocationError(false, map.getCenter());
-  }
+  userLoc = {
+    lat: 53.3452147,
+    lng: -6.2600541,
+  };
+
+  var marker = new google.maps.Marker({
+    position: userLoc,
+    map: map,
+    title: "Your Location",
+    icon: {
+      url: "https://cdn-icons-png.flaticon.com/128/6735/6735939.png",
+      scaledSize: new google.maps.Size(40, 40),
+    },
+  });
+  map.setCenter(userLoc);
+  loadStationCoordinates(stationsData);
 }
+
+// function handleUserLocation() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(
+//       (position) => {
+//         userLoc = {
+//           lat: position.coords.latitude,
+//           lng: position.coords.longitude,
+//         };
+
+//         var marker = new google.maps.Marker({
+//           position: userLoc,
+//           map: map,
+//           title: "Your Location",
+//           icon: {
+//             url: "https://cdn-icons-png.flaticon.com/128/6735/6735939.png",
+//             scaledSize: new google.maps.Size(40, 40),
+//           },
+//         });
+//         map.setCenter(userLoc);
+//         loadStationCoordinates(stationsData);
+//       },
+//       () => {
+//         handleLocationError(true, map.getCenter());
+//       }
+//     );
+//   } else {
+//     handleLocationError(false, map.getCenter());
+//   }
+// }
 
 function initAutocomplete() {
   var input = document.getElementById("autocomplete");
