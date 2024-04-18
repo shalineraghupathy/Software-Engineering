@@ -267,7 +267,8 @@ async function initMap() {
   await fetchPredictionData();
   initAutocomplete();
   filterPredictionsByDate;
-  handleUserLocation();
+  // handleUserLocation();
+  loadStationCoordinates(stationsData);
 }
 
 function handleUserLocation() {
@@ -287,7 +288,6 @@ function handleUserLocation() {
             scaledSize: new google.maps.Size(40, 40),
           },
         });
-
         map.setCenter(userLoc);
         loadStationCoordinates(stationsData);
       },
