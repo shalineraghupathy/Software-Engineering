@@ -217,19 +217,22 @@ body{
   color: #ffffff;
   background-color: #114b56;
 }
+.date-time-picker {
+  display: flex;           /* Aligns children (select elements) in a row */
+  align-items: center;     /* Vertically centers the select elements */
+  gap: 10px;               /* Adds space between the select elements */
+}
 
-
-select {
-  width: 200px; 
+.date-time-picker select {
+  display: block;         /* Ensures select elements are block-level to fill the flex container */
+  width: auto;    
+  width: 45%; 
   padding: 8px; 
-  margin: 10px; 
+  /* margin: 10px;  */
   border: 1px solid #ccc; 
   border-radius: 5px;
   font-size: 16px; 
-  cursor: pointer; 
-}
-#dateSelector {
-  margin-bottom: 20px;
+  cursor: pointer;         /* Allows the select elements to grow as needed based on their content */
 }
 
 

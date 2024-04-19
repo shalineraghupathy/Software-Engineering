@@ -12,6 +12,10 @@ var timeValue = null;
 var predictionsData = [];
 var dateSelector;
 var hourSelector;
+var metaTag = document.createElement("meta");
+metaTag.name = "viewport";
+metaTag.content = "width=device-width, initial-scale=0.75";
+document.getElementsByTagName("head")[0].appendChild(metaTag);
 
 async function fetchStationData() {
   try {
