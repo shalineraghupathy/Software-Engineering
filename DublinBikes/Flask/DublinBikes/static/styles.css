@@ -1,4 +1,4 @@
-/* Reset some default styles */
+/* Reset  default styles */
 body,
 h1,
 h2,
@@ -10,7 +10,7 @@ ul {
   font-family: "Raleway", sans-serif;
 }
 
-/* Ensure html and body are full height for flexbox layout */
+
 html,
 body {
   height: 100%;
@@ -29,17 +29,17 @@ body {
 
 .logo {
   display: flex;
-  align-items: center; /* Ensure vertical centering of text and image */
+  align-items: center; 
 }
 
 .logo-text {
-  margin-right: 10px; /* Space between the text and the logo */
-  font-size: 30px; /* Adjust the size as needed */
+  margin-right: 10px; 
+  font-size: 30px; 
   font-family: "Raleway", sans-serif;
 }
 
 .logo img {
-  height: 50px; /* Adjust the size of your logo */
+  height: 50px; 
 }
 
 .nav-links {
@@ -50,7 +50,7 @@ body {
 }
 
 .nav-links li {
-  padding: 0 20px; /* Adjust the spacing between the items */
+  padding: 0 20px; 
 }
 
 .nav-links a {
@@ -60,38 +60,38 @@ body {
 }
 
 .nav-links a:hover {
-  color: #aaa; /* Change the hover color */
+  color: #aaa; 
 }
 
-/* Improved focus style for better accessibility */
+
 .navbar a:focus,
 .search-input:focus,
 .search-button:focus {
-  outline: none; /* Visible and contrasting outline */
+  outline: none;
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
-  height: 100%; /* Ensure wrapper fills the screen vertically */
+  height: 100%; 
 }
 
-/* Content styles */
+
 .content {
   text-align: center;
-  flex: 1; /* Allow content to grow and fill available space */
-  position: relative; /* Adjusted for better control */
+  flex: 1; 
+  position: relative;
 }
 
 #map {
   width: 100%;
-  height: 100%; /* Adjust height to fill content area */
+  height: 100%; /
 }
 
-/* Style for search container */
+/* search container */
 .search-container {
   position: absolute;
-  top: 8%; /* Adjusted for fixed navbar */
+  top: 8%; /*  fixed navbar */
   left: 3%;
   z-index: 5;
   border-radius: 25px;
@@ -106,8 +106,6 @@ body {
 }
 
 .search-button {
-  /* padding: 0; */
-  /* margin: 5px; */
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -122,7 +120,7 @@ body {
 .station-details-panel {
   position: fixed;
   left: 0;
-  width: 20%; /* Panel takes up 30% of the width */
+  width: 20%; 
   height: 100%;
   background-color: #fff;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
@@ -168,16 +166,16 @@ body {
 /* Media query for mobile responsiveness */
 @media (max-width: 768px) {
   .navbar li {
-    display: block; /* Stack nav items vertically on small screens */
-    margin: 10px 0; /* Add some vertical spacing */
+    display: block; 
+    margin: 10px 0; 
   }
 
   .search-container {
-    top: 70px; /* Adjust search bar position below stacked navbar */
+    top: 70px; 
   }
 
   .station-details-panel {
-    width: 100%; /* Panel takes full width on smaller screens */
+    width: 100%; 
   }
 }
 
@@ -212,59 +210,34 @@ body {
   background-color: #114b56;
 }
 
-/* date time picker */
 
-/* .date-time-picker {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-}
-
-.date-time-picker label {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.date-time-picker input {
-  margin-bottom: 10px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-} */
-
-/* General styling for the select boxes */
 select {
-  width: 200px; /* Fixed width for the selectors */
-  padding: 8px; /* Padding inside the select box */
-  margin: 10px; /* Margin around each select box */
-  border: 1px solid #ccc; /* Light grey border */
-  border-radius: 5px; /* Rounded corners */
-  font-size: 16px; /* Readable text size */
-  cursor: pointer; /* Cursor indicates it's selectable */
+  width: 200px; 
+  padding: 8px; 
+  margin: 10px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  font-size: 16px; 
+  cursor: pointer; 
 }
 #dateSelector {
   margin-bottom: 20px;
 }
 
-/* Styling when the user interacts with the select */
+
 select:hover {
-  border-color: #888; /* Darker border on hover */
+  border-color: #888; /
 }
 
 select:focus {
-  border-color: #0056b3; /* Blue border when focused */
-  outline: none; /* Remove default focus outline */
+  border-color: #0056b3;
+  outline: none;
 }
 
-/* Styling for disabled options */
 select option[disabled] {
-  color: #aaa; /* Grey out disabled option */
+  color: #aaa;
 }
 
-/* Hidden elements styling, just in case they need to be unhidden */
 select[style*="display: none"] {
   display: block !important;
   visibility: hidden;
@@ -272,16 +245,11 @@ select[style*="display: none"] {
   top: -9999px;
 }
 
-/* Label styling for better accessibility */
 label {
-  font-weight: bold; /* Make labels bold */
-  margin-right: 5px; /* Space between label and select */
-  font-size: 14px; /* Smaller text for labels */
+  font-weight: bold;
+  margin-right: 5px;
+  font-size: 14px;
 }
-
-/* results container */
-
-/* Styling for the results container that acts as a card */
 
 #predictionResults {
   background-color: #f9f9f9;
@@ -292,12 +260,49 @@ label {
   margin-top: 20px;
 }
 
-/* Additional styling for paragraphs inside the card to manage spacing */
 #predictionResults p {
-  margin-bottom: 12px; /* Spacing between paragraphs */
+  margin-bottom: 12px;
 }
 
-/* Remove extra space after the last paragraph */
 #predictionResults p:last-child {
-  margin-bottom: 0; /* No extra space after the last paragraph */
+  margin-bottom: 0;
+}
+
+/* weather */
+
+.weather-container {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  text-align: center;
+  position: absolute;
+  justify-content: center;
+  top:7%;
+  z-index: 3;
+  left: 37.5%;
+  background-color: rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 50px;
+}
+
+#current-weather {
+  display: flex;
+}
+
+#current-forecast {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 20px;
+}
+#weather-forecast {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 20px;
+}
+
+.day-forecast {
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
 }
