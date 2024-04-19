@@ -701,6 +701,7 @@ function addDateTimeSelectors(station, container) {
 
   hourSelector.addEventListener("change", () => {
     updatePredictionDetails(station, container);
+    updateChart(station, container);
   });
 
   const pickerDiv = document.createElement("div");
@@ -765,11 +766,17 @@ function updatePredictionDetails(station, container) {
   );
 
   let resultsContainer = document.getElementById("predictionResults");
+  let chartContainer = document.getElementById("predictionChart");
 
   if (!resultsContainer) {
     resultsContainer = document.createElement("div");
     resultsContainer.id = "predictionResults";
     document.body.appendChild(resultsContainer);
+  }
+  if (!chartContainer) {
+    chartContainer = document.createElement("div");
+    chartContainer.id = "predictionChart";
+    document.body.appendChild(chartContainer);
   }
 
   if (prediction) {
@@ -780,6 +787,48 @@ function updatePredictionDetails(station, container) {
   } else {
     resultsContainer.innerHTML = "<p>No prediction data available.</p>";
   }
+  if (prediction) {
+    const content = ` <canvas id="standsChart"></canvas>`;
+    chartContainer.innerHTML = content;
+  } else {
+    chartContainer.innerHTML = "<p>No prediction data available.</p>";
+  }
 
   container.appendChild(resultsContainer);
+  container.appendChild(chartContainer);
+}
+
+function updateChart(station, container) {
+  const selectedStation = station.number;
+  const selectedDate = dateSelector.value;
+  const filteredData = predictionsData.filter(
+    (item) =>
+      item.station_number == selectedStation && item.date == selectedDate
+  );
+
+  const ctx = document.getElementById("standsChart").getContext("2d");
+  const labels = filteredData.map((item) => `${item.hour}:00`);
+  const data = filteredData.map((item) => item.predicted_stands);
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Predicted Stands",
+          data: data,
+          borderColor: "rgb(75, 192, 192)",
+          tension: 0.1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
 }
